@@ -59,7 +59,7 @@ If you created a repository from this template and want to remove it:
 
 **On GitHub:**
 1. Go to your repository Settings
-2. Scroll to the bottom "Danger Zone"
+2. Scroll to the bottom "Danger Zone" section
 3. Click "Delete this repository"
 
 **Locally:**
