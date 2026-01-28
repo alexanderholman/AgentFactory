@@ -10,33 +10,34 @@ other documents feel free to adapt it to fit your needs, adding, modifying and r
 ## Prerequisites 
 <!-- List of a conditions that need to be met prior to installation, including os requirements, dependancies, etc -->
 <!-- EXAMPLE START -->
-* [{{dependency-name}}]({{dependency-link}})
+* Git for cloning the repository
+* A GitHub account for using the templates
 <!--  EXAMPLE END -->
 
 ## From scratch
 <!-- Step-by-step guide on how to install -->
 <!-- EXAMPLE START -->
-Use Aptitude to install the {{package-name}}.
+Clone the AgentFactory repository to use as a template.
 ```bash
-sudo apt install package-name
+git clone https://github.com/alexanderholman/AgentFactory.git
 ```
 <!--  EXAMPLE END -->
 
 ## Updating
 <!-- Step-by-step guide on how to update -->
 <!-- EXAMPLE START -->
-Update Aptitude, then use it to update the {{package-name}}.
+Pull the latest changes from the AgentFactory repository.
 ```bash
-sudo apt update
-sudo apt upgrade package-name
+cd AgentFactory
+git pull origin main
 ```
 <!--  EXAMPLE END -->
 
 ## Removal and how-to uninstall
 <!-- Step-by-step guide on how to remove the software -->
 <!-- EXAMPLE START -->
-Using Aptitude, purge {{package-name}} from the system.
+Simply remove the AgentFactory directory from your system.
 ```bash
-sudo apt purge package-name
+rm -rf AgentFactory
 ```
 <!--  EXAMPLE END -->

@@ -5,14 +5,14 @@ either to the relevant markdown files included or to a wiki. It is written to be
 as per the other documents feel free to adapt it to fit your needs, adding, modifying and removing as necessary.
 -->
 
-# {{package-name}}
+# AgentFactory
 <!-- A quick description... -->
 
 <!-- All badges representing the current status of the application below should they exist -->
 
-## What is {{package-name}}
+## What is AgentFactory
 <!-- A brief description of what the project is, why it exists. -->
-{{package-description}}
+AgentFactory is a template repository for creating and managing GitHub agent configurations. It provides a standardized structure and documentation templates for building agent markdown files with YAML frontmatter specifications.
 
 <!-- if a spec is availble, reference here-->
 
@@ -28,7 +28,7 @@ and the [CONTRIBUTING](/.github/CONTRIBUTING.md) guide.
 ## Need support
 Should you need further support not covered above, please take a look at the [SUPPORT](/.github/SUPPORT.md) guide.
 
-Further documentation might be found in the `/docs` directory or the [Wiki](https://github.com/alexanderholman/{{repo-name}}/wiki) 
+Further documentation might be found in the `/docs` directory or the [Wiki](https://github.com/alexanderholman/AgentFactory/wiki) 
 should either be available.
 
 ## Legal
