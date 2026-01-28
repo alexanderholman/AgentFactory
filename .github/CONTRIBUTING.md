@@ -38,7 +38,7 @@ on your end before raising a ticket.
 doing and it's implementation is required, verses a feature request which is a "nice to have" or a suggestion.
 * **Feature Request** For suggestions or requests for addition features or changes, generally they should be for 
 extensions to current functionality.
-* **Question** If you have a question not address in the [SUPPORT](/SUPPORT.md) document or the [Wiki](https://github.com/alexanderholman/AgentFactory/wiki) 
+* **Question** If you have a question not addressed in the [SUPPORT](/SUPPORT.md) document or the [Wiki](https://github.com/alexanderholman/AgentFactory/wiki) 
 (should one exist) please ask it under this label/template. We will respond as soon as we are able to do so.
 * **Brainstorm** Issues to hash out ideas and future possibilities, whether with the aim of creating a feature request 
 or a task from it or not.

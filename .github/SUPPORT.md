@@ -41,7 +41,7 @@ document.
 Should you wish or need to get involved, start by reading our guide on [CONTRIBUTING](/.github/CONTRIBUTING.md).
 
 ### Known issues
-For a list of know issues and bugs visit the [GitHub issue tracker](https://github.com/alexanderholman/AgentFactory/issues) 
+For a list of known issues and bugs visit the [GitHub issue tracker](https://github.com/alexanderholman/AgentFactory/issues) 
 and filter by the label `Type: Bug`.
 
 ### Legal
