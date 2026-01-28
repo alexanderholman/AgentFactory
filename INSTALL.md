@@ -35,21 +35,23 @@ git clone https://github.com/alexanderholman/AgentFactory.git
 ## Updating
 <!-- Step-by-step guide on how to update -->
 <!-- EXAMPLE START -->
-To get the latest updates from AgentFactory into your repository created from this template:
+**Note:** Template repositories are designed to be a starting point. Once you create a repository from this template, it becomes independent. Most users will customize their documentation and don't need to pull updates from the template.
 
-**Option 1: Manual Update**
+However, if you want to incorporate specific updates from AgentFactory:
+
+**Option 1: Manual Update (Advanced)**
 1. Add AgentFactory as a remote:
 ```bash
 git remote add template https://github.com/alexanderholman/AgentFactory.git
 git fetch template
 ```
-2. Merge specific files or changes as needed:
+2. Carefully merge specific files or changes as needed (note: this may conflict with your customizations):
 ```bash
 git checkout template/main -- path/to/file
 ```
 
 **Option 2: Fresh Start**
-If you haven't customized the templates much, create a new repository from the updated template.
+If you haven't customized the templates much, you can create a new repository from the updated template and migrate your custom content.
 <!--  EXAMPLE END -->
 
 ## Removal and how-to uninstall
