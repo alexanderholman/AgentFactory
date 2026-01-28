@@ -78,21 +78,52 @@ if [ -d "agents" ] && [ "$(find agents/ -maxdepth 1 -name '*.md' -type f 2>/dev/
              [ \$(grep -n '^## Outputs' '$file' | cut -d: -f1) -lt \$(grep -n '^## Behavior' '$file' | cut -d: -f1) ] && \
              [ \$(grep -n '^## Behavior' '$file' | cut -d: -f1) -lt \$(grep -n '^## Constraints' '$file' | cut -d: -f1) ]"
     done
+    
+    # TEST-002-2: Verify heading format follows markdown H2 convention
+    for file in agents/*.md; do
+        [ -f "$file" ] || continue
+        run_test "TEST-002-2" \
+            "Verify H2 heading format in $(basename $file)" \
+            "grep -E '^## (Purpose|Inputs|Outputs|Behavior|Constraints)$' '$file' > /dev/null"
+    done
 else
-    echo "Note: No agent markdown files found yet - skipping TEST-002-1"
+    echo "Note: No agent markdown files found yet - skipping TEST-002-1 and TEST-002-2"
     echo ""
 fi
 
+# TEST-003-1: Verify each agent has at least one tag
 # TEST-003-2: Verify agent IDs are unique
+# TEST-003-3: Verify tags are from allowed list
 echo "=== SPEC-003: Tags and Metadata ==="
 if [ -f "agents.yaml" ]; then
+    # TEST-003-1: Check each agent has at least one tag
+    run_test "TEST-003-1" \
+        "Verify each agent has at least one tag" \
+        "[ -z \"\$(awk '/  - id:/{flag=1; next} flag && /tags:/{flag=2; next} flag==2 && /^[[:space:]]*-/{flag=0; next} flag==2 && /^  - id:/{print \"no_tags\"; flag=0}' agents.yaml | grep no_tags)\" ]"
+    
+    # TEST-003-2: Check agent IDs are unique
     run_test "TEST-003-2" \
         "Verify agent IDs are unique in agents.yaml" \
         "! grep 'id:' agents.yaml | awk '{print \$2}' | sed 's/\"//g' | sort | uniq -d | grep -q ."
+    
+    # TEST-003-3: Verify tags are from allowed list
+    if grep -q 'allowed_tags:' agents.yaml; then
+        # Extract allowed tags and agent tags, then compare
+        allowed_tags=$(awk '/^allowed_tags:/,/^# / {if (/^  - /) print $2}' agents.yaml | tr '\n' '|' | sed 's/|$//')
+        if [ -n "$allowed_tags" ]; then
+            run_test "TEST-003-3" \
+                "Verify all tags are from allowed list" \
+                "! awk '/^agents:/,/^# Validation/ {if (/^    tags:/) {flag=1; next} if (flag && /^      - /) {print \$2} if (flag && /^    [a-z_]/) flag=0}' agents.yaml | grep -vE \"^($allowed_tags)\$\" | grep -q ."
+        else
+            echo "Note: No allowed_tags found - skipping TEST-003-3"
+        fi
+    else
+        echo "Note: No allowed_tags defined in agents.yaml - skipping TEST-003-3"
+    fi
 else
     echo "Error: agents.yaml not found"
-    FAILED=$((FAILED + 1))
-    TOTAL=$((TOTAL + 1))
+    FAILED=$((FAILED + 3))
+    TOTAL=$((TOTAL + 3))
     echo ""
 fi
 
