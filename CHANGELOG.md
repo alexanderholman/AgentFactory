@@ -11,6 +11,17 @@ current version.
 A rough overview of changes to over time.
 
 <!-- EXAMPLE START -->
+## [v1.1.0] 2026-01-28
+GitHub Copilot Agent Readiness Release
+* [Added] - `.github/copilot-instructions.md` - Comprehensive workspace instructions for GitHub Copilot
+* [Added] - `COPILOT_INTEGRATION.md` - Complete guide for using AgentFactory with GitHub Copilot
+* [Added] - `.github/workflows/validate-agents.yml` - Automated validation workflow for CI/CD
+* [Fixed] - Updated all 7 core agent files (Architect, Builder, Skeptic, Editor, ProjectManager, CitationOfficer, ChatGPT) to include required heading structure
+* [Fixed] - All agents now have proper Purpose, Inputs, Outputs, Behavior, and Constraints sections in correct order
+* [Updated] - README.md with GitHub Copilot integration information and validation details
+* [Validated] - All 22 validation tests now pass successfully
+* [Enhanced] - Repository is now fully ready for GitHub Copilot Workspace integration
+
 ## [v1.0.0](https://github.com/alexanderholman/AgentFactory/releases/tag/v1.0.0) 2026-01-28
 Initial release of AgentFactory - a framework for defining, documenting, and managing AI agents.
 * [Added] - Core agent definitions (Architect, Builder, Skeptic, Editor, ProjectManager, CitationOfficer, ChatGPT)

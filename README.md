@@ -19,8 +19,16 @@ AgentFactory is a framework for defining, documenting, and managing AI agents us
 - **Append-Only Logs**: Historical record of specs, runs, and decisions
 - **Validation Tools**: Automated tests for all MUST requirements
 - **No Fabrication Policy**: All citations and results must be verifiable
+- **GitHub Copilot Integration**: Seamlessly works with GitHub Copilot Workspace
 
 For detailed specifications, see [specs.md](/specs.md).
+
+### GitHub Copilot Agent Ready
+This repository is fully configured for GitHub Copilot Workspace:
+- `.github/copilot-instructions.md` provides workspace context
+- Automated validation via GitHub Actions
+- Agent definitions compatible with Copilot patterns
+- See [COPILOT_INTEGRATION.md](/COPILOT_INTEGRATION.md) for details
 
 ## Getting started
 
@@ -29,6 +37,7 @@ For detailed specifications, see [specs.md](/specs.md).
 2. Check [agents.yaml](/agents.yaml) for agent configuration structure
 3. Read [specs.md](/specs.md) for detailed specifications
 4. Review [decisions.md](/decisions.md) to understand design choices
+5. See [COPILOT_INTEGRATION.md](/COPILOT_INTEGRATION.md) for GitHub Copilot usage
 
 ### Adding a New Agent
 1. Define the agent in `agents.yaml` with all required fields
@@ -42,6 +51,10 @@ Run the validation script to check compliance:
 ```bash
 ./validate_agents.sh
 ```
+
+All 22 validation tests should pass before committing changes.
+
+GitHub Actions automatically validates agent definitions on pull requests.
 
 For more details, see [INSTALL](/INSTALL.md).
 
@@ -76,6 +89,8 @@ Further documentation:
 - [specs.md](/specs.md) - Technical specifications (append-only)
 - [agent_runs.md](/agent_runs.md) - Agent execution log (append-only)
 - [decisions.md](/decisions.md) - Design decisions (append-only)
+- [COPILOT_INTEGRATION.md](/COPILOT_INTEGRATION.md) - GitHub Copilot integration guide
+- [.github/copilot-instructions.md](/.github/copilot-instructions.md) - Copilot workspace instructions
 
 ## Legal
 Unless otherwise stated, or where written permission has been given by the copyright holder, this software is for use 
