@@ -6,7 +6,7 @@ as per the other documents feel free to adapt it to fit your needs, adding, modi
 -->
 
 # AgentFactory
-A structured repository for managing AI agents with flat file architecture and comprehensive documentation standards.
+<!-- A quick description... -->
 
 <!-- All badges representing the current status of the application below should they exist -->
 

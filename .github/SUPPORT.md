@@ -41,7 +41,7 @@ document.
 Should you wish or need to get involved, start by reading our guide on [CONTRIBUTING](/.github/CONTRIBUTING.md).
 
 ### Known issues
-For a list of know issues and bugs visit the [GitHub issue tracker](https://github.com/alexanderholman/{{repo-name}}/issues) 
+For a list of known issues and bugs visit the [GitHub issue tracker](https://github.com/alexanderholman/AgentFactory/issues) 
 and filter by the label `Type: Bug`.
 
 ### Legal
@@ -50,7 +50,7 @@ by the copyright holder only. Public availability of this repository or any of i
 or rights of any kind. Further information can be found in the [LICENSE](/LICENSE) document.
 
 ### Further information
-Further documentation might be found in the `/docs` directory or the [Wiki](https://github.com/alexanderholman/{{repo-name}}/wiki) 
+Further documentation might be found in the `/docs` directory or the [Wiki](https://github.com/alexanderholman/AgentFactory/wiki) 
 should either be available.
 
 ## Getting help

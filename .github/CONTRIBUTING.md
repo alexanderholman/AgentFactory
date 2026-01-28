@@ -20,7 +20,7 @@ so in person or by emailing us directly at [security@holman.org.uk](mailto:secur
 
 ### Everything else
 For all other issues not related to security (including `bugs`, `tasks`, `feature requests`, `questions` and 
-`brainstorming`) raise an issue under [GitHub's issue tracker](https://github.com/alexanderholman/{{repo-name}}/issues) 
+`brainstorming`) raise an issue under [GitHub's issue tracker](https://github.com/alexanderholman/AgentFactory/issues) 
 using the template most fitting.
 
 Before create a new issue, please take a moment to search whether or not a similar or the same issue has already been 
@@ -38,7 +38,7 @@ on your end before raising a ticket.
 doing and it's implementation is required, verses a feature request which is a "nice to have" or a suggestion.
 * **Feature Request** For suggestions or requests for addition features or changes, generally they should be for 
 extensions to current functionality.
-* **Question** If you have a question not address in the [SUPPORT](/SUPPORT.md) document or the [Wiki](https://github.com/alexanderholman/{{repo-name}}/wiki) 
+* **Question** If you have a question not addressed in the [SUPPORT](/SUPPORT.md) document or the [Wiki](https://github.com/alexanderholman/AgentFactory/wiki) 
 (should one exist) please ask it under this label/template. We will respond as soon as we are able to do so.
 * **Brainstorm** Issues to hash out ideas and future possibilities, whether with the aim of creating a feature request 
 or a task from it or not.
@@ -97,7 +97,7 @@ I need to know to rebuild an overview of the changes per release without having 
 
 #### Pull Requests
 Instead of merging or pushing directly upstream, you should push to your forked repository and use GitHub's 
-[Pull Request](https://github.com/alexanderholman/{{repo-name}}/pulls) utility as the mechanism to merge. Prior to 
+[Pull Request](https://github.com/alexanderholman/AgentFactory/pulls) utility as the mechanism to merge. Prior to 
 merging, all code should be subject to the review of another developer, even if it was written as a pair.
 
 ##### Code Review
