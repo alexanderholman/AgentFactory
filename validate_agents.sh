@@ -3,7 +3,7 @@
 # Validation script for Agent Factory
 # This script runs all MUST requirement tests
 
-set -e
+# Note: Do not use 'set -e' here; tests are expected to fail without aborting the script.
 
 echo "======================================"
 echo "Agent Factory Validation Suite"
@@ -49,12 +49,23 @@ run_test() {
     echo ""
 }
 
+# Helper: verify there are no files nested beyond one directory level under agents/
+check_no_nested_files() {
+    if find agents/ -mindepth 2 -type f 2>/dev/null | grep -q .; then
+        # Found files deeper than one level -> fail
+        return 1
+    else
+        # No such files -> pass
+        return 0
+    fi
+}
+
 # TEST-001-1: Verify no nested directories beyond one level
 echo "=== SPEC-001: File Structure ==="
 if [ -d "agents" ]; then
     run_test "TEST-001-1" \
         "Verify flat file structure (no nested directories)" \
-        "[ -z \"\$(find agents/ -mindepth 2 -type f 2>/dev/null)\" ]"
+        "check_no_nested_files"
 else
     echo "Note: agents/ directory does not exist yet - skipping TEST-001-1"
     echo ""
