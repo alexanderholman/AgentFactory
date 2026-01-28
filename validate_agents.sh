@@ -50,14 +50,23 @@ else
     echo ""
 fi
 
-# TEST-002-1: Verify required headings in agent files
+# TEST-002-1: Verify required headings in agent files (presence and order)
 echo "=== SPEC-002: Agent File Format ==="
 if [ -d "agents" ] && [ "$(find agents/ -maxdepth 1 -name '*.md' -type f 2>/dev/null | wc -l)" -gt 0 ]; then
     for file in agents/*.md; do
         [ -f "$file" ] || continue
+        # Check both presence and order of headings
         run_test "TEST-002-1" \
             "Verify required headings in $(basename $file)" \
-            "grep -q '## Purpose' '$file' && grep -q '## Inputs' '$file' && grep -q '## Outputs' '$file' && grep -q '## Behavior' '$file' && grep -q '## Constraints' '$file'"
+            "grep -n '^## Purpose' '$file' > /dev/null && \
+             grep -n '^## Inputs' '$file' > /dev/null && \
+             grep -n '^## Outputs' '$file' > /dev/null && \
+             grep -n '^## Behavior' '$file' > /dev/null && \
+             grep -n '^## Constraints' '$file' > /dev/null && \
+             [ \$(grep -n '^## Purpose' '$file' | cut -d: -f1) -lt \$(grep -n '^## Inputs' '$file' | cut -d: -f1) ] && \
+             [ \$(grep -n '^## Inputs' '$file' | cut -d: -f1) -lt \$(grep -n '^## Outputs' '$file' | cut -d: -f1) ] && \
+             [ \$(grep -n '^## Outputs' '$file' | cut -d: -f1) -lt \$(grep -n '^## Behavior' '$file' | cut -d: -f1) ] && \
+             [ \$(grep -n '^## Behavior' '$file' | cut -d: -f1) -lt \$(grep -n '^## Constraints' '$file' | cut -d: -f1) ]"
     done
 else
     echo "Note: No agent markdown files found yet - skipping TEST-002-1"
@@ -66,9 +75,16 @@ fi
 
 # TEST-003-2: Verify agent IDs are unique
 echo "=== SPEC-003: Tags and Metadata ==="
-run_test "TEST-003-2" \
-    "Verify agent IDs are unique in agents.yaml" \
-    "! grep -A1 'agents:' agents.yaml | grep 'id:' | sort | uniq -d | grep -q ."
+if [ -f "agents.yaml" ]; then
+    run_test "TEST-003-2" \
+        "Verify agent IDs are unique in agents.yaml" \
+        "! grep 'id:' agents.yaml | awk '{print \$2}' | sed 's/\"//g' | sort | uniq -d | grep -q ."
+else
+    echo "Error: agents.yaml not found"
+    FAILED=$((FAILED + 1))
+    TOTAL=$((TOTAL + 1))
+    echo ""
+fi
 
 # TEST-004-1: Verify append-only files are only appended to
 echo "=== SPEC-004: Append-Only Files ==="
@@ -92,6 +108,12 @@ run_test "TEST-006-1" \
 echo "======================================"
 echo "Validation Summary"
 echo "======================================"
+
+if [ $TOTAL -eq 0 ]; then
+    echo -e "${YELLOW}Warning: No tests were executed!${NC}"
+    exit 1
+fi
+
 echo "Total tests run: $TOTAL"
 echo -e "${GREEN}Passed: $PASSED${NC}"
 if [ $FAILED -gt 0 ]; then

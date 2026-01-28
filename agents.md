@@ -96,15 +96,29 @@ To validate agent files, run the following checks:
    find agents/ -mindepth 2 -type f && echo "FAIL: Nested files found" || echo "PASS"
    ```
 
-2. **Heading Check**: Verify required headings exist
+2. **Heading Check**: Verify required headings exist in correct order
    ```bash
    for file in agents/*.md; do
+     # Check presence of all required headings
      grep -q "## Purpose" "$file" && 
      grep -q "## Inputs" "$file" && 
      grep -q "## Outputs" "$file" && 
      grep -q "## Behavior" "$file" && 
      grep -q "## Constraints" "$file" || 
      echo "FAIL: Missing headings in $file"
+     
+     # Check heading order (Purpose < Inputs < Outputs < Behavior < Constraints)
+     purpose_line=$(grep -n "^## Purpose" "$file" | cut -d: -f1)
+     inputs_line=$(grep -n "^## Inputs" "$file" | cut -d: -f1)
+     outputs_line=$(grep -n "^## Outputs" "$file" | cut -d: -f1)
+     behavior_line=$(grep -n "^## Behavior" "$file" | cut -d: -f1)
+     constraints_line=$(grep -n "^## Constraints" "$file" | cut -d: -f1)
+     
+     [ "$purpose_line" -lt "$inputs_line" ] && 
+     [ "$inputs_line" -lt "$outputs_line" ] && 
+     [ "$outputs_line" -lt "$behavior_line" ] && 
+     [ "$behavior_line" -lt "$constraints_line" ] || 
+     echo "FAIL: Headings out of order in $file"
    done
    ```
 
