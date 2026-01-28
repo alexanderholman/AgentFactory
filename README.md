@@ -12,7 +12,7 @@ as per the other documents feel free to adapt it to fit your needs, adding, modi
 
 ## What is AgentFactory
 <!-- A brief description of what the project is, why it exists. -->
-AgentFactory is a template repository for creating and managing GitHub agent configurations. It provides a standardized structure and documentation templates for building agent markdown files with YAML frontmatter specifications.
+AgentFactory is a template repository that provides a standardized project structure and comprehensive documentation templates for GitHub projects. It includes ready-to-use templates for contribution guidelines, code of conduct, issue templates, pull request templates, and other essential project documentation to help bootstrap new repositories with best practices.
 
 <!-- if a spec is availble, reference here-->
 

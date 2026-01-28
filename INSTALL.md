@@ -17,7 +17,16 @@ other documents feel free to adapt it to fit your needs, adding, modifying and r
 ## From scratch
 <!-- Step-by-step guide on how to install -->
 <!-- EXAMPLE START -->
-Clone the AgentFactory repository to use as a template.
+Use this repository as a GitHub template to create a new repository with the same structure.
+
+**Option 1: Use GitHub's Template Feature (Recommended)**
+1. Visit the [AgentFactory repository](https://github.com/alexanderholman/AgentFactory)
+2. Click the green "Use this template" button
+3. Select "Create a new repository"
+4. Fill in your new repository details and click "Create repository"
+
+**Option 2: Clone for Local Development**
+If you need to work with the templates locally:
 ```bash
 git clone https://github.com/alexanderholman/AgentFactory.git
 ```
@@ -26,18 +35,36 @@ git clone https://github.com/alexanderholman/AgentFactory.git
 ## Updating
 <!-- Step-by-step guide on how to update -->
 <!-- EXAMPLE START -->
-Pull the latest changes from the AgentFactory repository.
+To get the latest updates from AgentFactory into your repository created from this template:
+
+**Option 1: Manual Update**
+1. Add AgentFactory as a remote:
 ```bash
-cd AgentFactory
-git pull origin main
+git remote add template https://github.com/alexanderholman/AgentFactory.git
+git fetch template
 ```
+2. Merge specific files or changes as needed:
+```bash
+git checkout template/main -- path/to/file
+```
+
+**Option 2: Fresh Start**
+If you haven't customized the templates much, create a new repository from the updated template.
 <!--  EXAMPLE END -->
 
 ## Removal and how-to uninstall
 <!-- Step-by-step guide on how to remove the software -->
 <!-- EXAMPLE START -->
-Simply remove the AgentFactory directory from your system.
+If you created a repository from this template and want to remove it:
+
+**On GitHub:**
+1. Go to your repository Settings
+2. Scroll to the bottom "Danger Zone"
+3. Click "Delete this repository"
+
+**Locally:**
+Simply remove the directory from your system:
 ```bash
-rm -rf AgentFactory
+rm -rf your-repository-name
 ```
 <!--  EXAMPLE END -->
