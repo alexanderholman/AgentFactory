@@ -1,0 +1,58 @@
+# filename: project_context_agent_factory.yaml
+
+project:
+  project_id: "agent-factory"
+  title: "Agent Factory System"
+  intent: "Build a flat-file agent/spec system usable inside ChatGPT and later hosted on GitHub."
+  status: "active"
+
+constraints:
+  flat_files_only: true
+  environments:
+    - "ChatGPT interface (file upload + copy/paste)"
+    - "GitHub (public, later)"
+  allowed_languages:
+    - "markdown"
+    - "yaml"
+  forbidden_tools: []
+
+goals:
+  - "Define reusable agent role files (Architect/Builder/Skeptic/etc.)"
+  - "Define spec templates and logging conventions"
+  - "Enable repeatable: spec → build → review → finalize workflows"
+
+deliverables:
+  - "agents.yaml"
+  - "agents.md"
+  - "specs.md"
+  - "project_context_<project>.yaml format"
+  - "Core agents: ChatGPT.md, Architect.md, Builder.md, Skeptic.md"
+  - "Specialism files: Researcher.md, Coder.md, CitationManager.md"
+
+current_state:
+  what_exists:
+    - "agents.yaml (v1.1)"
+    - "ChatGPT.md"
+    - "Architect.md"
+    - "Builder.md"
+    - "Skeptic.md"
+  what_is_missing:
+    - "agents.md"
+    - "specs.md"
+    - "project_context schema + convention"
+    - "Specialism trait files"
+  known_issues:
+    - "[ASSUMPTION] No enforcement tool exists; compliance is social + review-based."
+
+workflow:
+  default_agent_pipeline:
+    - "Architect writes/updates Spec"
+    - "Builder produces v0.1 artifact"
+    - "Skeptic attempts to break / find edge cases"
+    - "Editor improves clarity and structure"
+    - "Citation Officer audits evidence and references"
+    - "Project Manager packages outputs + next actions"
+  quality_gates_to_apply:
+    - "writing"
+    - "code"
+    - "datasets"
