@@ -413,3 +413,157 @@ Require every MUST requirement to have at least one associated pass/fail test wi
 
 ---
 
+## [DEC-009] Agent Analysis and Expansion Recommendations
+**Date**: 2026-01-28
+**Status**: Proposed
+**Decision Maker**: System Analysis / GitHub Copilot Agent
+
+### Context
+The initial Agent Factory system was established with 7 core agents and 3 specialisms. After analyzing the system's coverage, gaps were identified in critical areas including testing, security, deployment, documentation, integration, data modeling, and performance optimization. A comprehensive analysis was needed to recommend additions that would enhance the system's capability without over-complicating it.
+
+### Decision
+Recommend a phased approach to expanding the agent system with 7 new agents and 7 new specialisms, prioritized by impact and necessity:
+
+**Phase 1 (High Priority - Immediate):**
+- Tester Agent - for systematic test creation and validation
+- SecurityReviewer Agent - for security analysis and compliance
+- Security Specialism - security standards
+- Testing Specialism - testing standards
+
+**Phase 2 (Medium Priority - Next Quarter):**
+- Deployer Agent - for deployment readiness
+- DocWriter Agent - for user-facing documentation
+- Integrator Agent - for API and integration design
+- DataModeler Agent - for data architecture
+- API Design Specialism
+- Deployment Specialism
+- Documentation Specialism
+
+**Phase 3 (Low Priority - As Needed):**
+- Optimizer Agent - for performance optimization
+- Data Specialism
+- Performance Specialism
+
+### Alternatives Considered
+- **Expand Existing Agents**: Add responsibilities to current agents
+  - Not chosen because it would violate single responsibility principle
+  - Would make agents too complex and harder to use
+  - Each specialty requires dedicated focus
+
+- **Create Mega-Agent**: Create one "Quality" agent to handle testing, security, performance
+  - Not chosen because specialization is more effective
+  - Would be too broad and lack deep expertise
+  - Goes against the factory pattern philosophy
+
+- **Minimal Expansion**: Only add 1-2 most critical agents
+  - Not chosen because it leaves too many gaps
+  - Would require revisiting expansion soon
+  - Better to have comprehensive plan even if phased
+
+- **Maximum Expansion**: Add 15+ agents covering every niche
+  - Not chosen because it adds unnecessary complexity
+  - Many niches don't have sufficient use cases yet
+  - Can lead to confusion about which agent to use
+
+### Consequences
+**Positive:**
+- Comprehensive coverage of software development lifecycle
+- Specialized expertise in critical areas (testing, security)
+- Better quality outputs with systematic validation
+- Clearer separation of concerns
+- Production-ready artifacts
+- Enhanced security posture
+- Better deployment support
+
+**Negative:**
+- More agents to learn and understand
+- Increased coordination complexity
+- More maintenance burden
+- Steeper learning curve for new users
+- Need to update documentation and tooling
+
+**Trade-offs:**
+- Completeness vs. Simplicity (chose completeness with phased approach)
+- Specialization vs. Generalization (chose specialization)
+- Immediate implementation vs. Phased rollout (chose phased)
+
+### Implementation Notes
+
+**For Each New Agent:**
+1. Create agent definition file in agents/ directory
+2. Follow required structure (Purpose, Inputs, Outputs, Behavior, Constraints)
+3. Add entry to agents.yaml with unique ID
+4. Tag appropriately with existing or new tags
+5. Run validation: ./validate_agents.sh
+6. Update integration documentation
+
+**For Each New Specialism:**
+1. Create specialism file in specialisms/ directory
+2. Define purpose, operating rules, outputs, quality gates
+3. Include test acceptance checks
+4. Reference from appropriate agent definitions
+
+**New Tags to Add:**
+- security (for SecurityReviewer)
+- quality (for Tester)
+- performance (for Optimizer)
+- data (for DataModeler)
+- api (for Integrator)
+
+**Workflow Integration:**
+Update orchestration to support optional agent invocation based on artifact type and requirements.
+
+**Documentation Updates:**
+- Update agents.md with new agent patterns
+- Update README.md with expanded agent list
+- Create workflow diagrams showing agent interactions
+- Update COPILOT_INTEGRATION.md with new agent capabilities
+
+### Phased Rollout Strategy
+
+**Phase 1 Success Criteria:**
+- Tester and SecurityReviewer agents created and validated
+- At least 2 test cases using new agents successfully completed
+- Security and Testing specialisms documented
+- No regression in existing agent functionality
+
+**Phase 2 Entry Criteria:**
+- Phase 1 agents proven valuable in practice
+- User feedback incorporated
+- Clear use cases for Phase 2 agents identified
+
+**Phase 3 Entry Criteria:**
+- Performance or data-heavy projects emerge
+- Demonstrated need for optimization or data modeling
+
+### Benefits and Mitigation
+
+**Key Benefits:**
+- **Quality**: Systematic testing and security review
+- **Completeness**: All lifecycle stages covered
+- **Scalability**: Can handle more complex projects
+- **Trust**: Better validation and security
+
+**Complexity Mitigation:**
+- Phased rollout reduces learning curve
+- Clear documentation of when to use each agent
+- ProjectManager orchestrates, users don't need to know all agents
+- Optional agents - only invoke what's needed
+
+### Related Decisions
+- DEC-001 (Flat File Structure) - New agents follow same pattern
+- DEC-002 (YAML Configuration) - New agents defined in agents.yaml
+- DEC-003 (Required Headings) - New agents use standard structure
+- DEC-008 (Test Requirements) - Tester agent enhances this capability
+
+### Related Specs
+- SPEC-001 (File Structure) - New agents maintain flat structure
+- SPEC-002 (Agent File Format) - New agents follow format
+- SPEC-003 (Tags and Metadata) - New agents properly tagged
+
+### Output Reference
+- Detailed analysis: agent_recommendations.md
+- Run log: agent_runs.md #002
+
+---
+
