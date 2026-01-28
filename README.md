@@ -5,19 +5,43 @@ either to the relevant markdown files included or to a wiki. It is written to be
 as per the other documents feel free to adapt it to fit your needs, adding, modifying and removing as necessary.
 -->
 
-# {{package-name}}
-<!-- A quick description... -->
+# AgentFactory
+A structured repository for managing AI agents with flat file architecture and comprehensive documentation standards.
 
 <!-- All badges representing the current status of the application below should they exist -->
 
-## What is {{package-name}}
-<!-- A brief description of what the project is, why it exists. -->
-{{package-description}}
+## What is AgentFactory
+AgentFactory is a framework for defining, documenting, and managing AI agents using a simple flat-file structure. It enforces standards for agent documentation, maintains append-only logs for specifications and decisions, and provides validation tools to ensure consistency.
 
-<!-- if a spec is availble, reference here-->
+### Key Features
+- **Flat File Structure**: Simple, navigable file organization
+- **Standardized Documentation**: Required headings and formatting for all agents
+- **Append-Only Logs**: Historical record of specs, runs, and decisions
+- **Validation Tools**: Automated tests for all MUST requirements
+- **No Fabrication Policy**: All citations and results must be verifiable
+
+For detailed specifications, see [specs.md](/specs.md).
 
 ## Getting started
-<!-- A brief guid on how to get started, possibly with links to some examples. -->
+
+### Quick Start
+1. Review the [agents.md](/agents.md) for rules and guidelines
+2. Check [agents.yaml](/agents.yaml) for agent configuration structure
+3. Read [specs.md](/specs.md) for detailed specifications
+4. Review [decisions.md](/decisions.md) to understand design choices
+
+### Adding a New Agent
+1. Define the agent in `agents.yaml` with all required fields
+2. Create the agent markdown file following the template in `agents.md`
+3. Ensure all required headings are present
+4. Run `./validate_agents.sh` to verify compliance
+5. Document the addition in `decisions.md`
+
+### Validation
+Run the validation script to check compliance:
+```bash
+./validate_agents.sh
+```
 
 For more details, see [INSTALL](/INSTALL.md).
 
@@ -28,8 +52,12 @@ and the [CONTRIBUTING](/.github/CONTRIBUTING.md) guide.
 ## Need support
 Should you need further support not covered above, please take a look at the [SUPPORT](/.github/SUPPORT.md) guide.
 
-Further documentation might be found in the `/docs` directory or the [Wiki](https://github.com/alexanderholman/{{repo-name}}/wiki) 
-should either be available.
+Further documentation:
+- [agents.md](/agents.md) - Agent documentation rules and templates
+- [agents.yaml](/agents.yaml) - Agent configuration schema
+- [specs.md](/specs.md) - Technical specifications (append-only)
+- [agent_runs.md](/agent_runs.md) - Agent execution log (append-only)
+- [decisions.md](/decisions.md) - Design decisions (append-only)
 
 ## Legal
 Unless otherwise stated, or where written permission has been given by the copyright holder, this software is for use 
