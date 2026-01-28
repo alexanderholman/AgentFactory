@@ -2,6 +2,9 @@
 # Configuration file for Agent Factory
 # This file defines the structure and metadata for agents in the system
 # All agents MUST be defined here before they can be used
+#
+# IMPORTANT: Before defining agents with file_path, ensure the agents/ directory exists.
+# The validation script will check for this directory and create it if needed.
 
 # Schema version
 schema_version: "1.0.0"

@@ -20,6 +20,16 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Check if agents/ directory exists when agents are defined in agents.yaml
+if [ -f "agents.yaml" ]; then
+    agent_count=$(grep -c '  - id:' agents.yaml 2>/dev/null || echo "0")
+    if [ "$agent_count" -gt 0 ] && [ ! -d "agents" ]; then
+        echo -e "${YELLOW}Warning: agents.yaml defines $agent_count agent(s) but agents/ directory does not exist.${NC}"
+        echo "Create the directory with: mkdir -p agents"
+        echo ""
+    fi
+fi
+
 # Test function
 run_test() {
     local test_id=$1

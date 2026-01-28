@@ -132,12 +132,15 @@ To validate agent files, run the following checks:
 
 To add a new agent:
 
-1. Define the agent in `agents.yaml` with all required fields
-2. Create the agent markdown file in the flat file structure
-3. Ensure all required headings are present
-4. Add appropriate tags from the allowed list
-5. Run validation tests
-6. Document the addition in `decisions.md`
+1. Ensure the `agents/` directory exists (create it if needed: `mkdir -p agents`)
+2. Define the agent in `agents.yaml` with all required fields
+3. Create the agent markdown file in the flat file structure (in `agents/` directory)
+4. Ensure all required headings are present
+5. Add appropriate tags from the allowed list
+6. Run validation tests
+7. Document the addition in `decisions.md`
+
+**Note**: The `agents/` directory MUST exist before you reference agent files in `agents.yaml`. If you define an agent in `agents.yaml` before creating the directory, the validation script will report an error.
 
 ## Modifying Existing Agents
 
