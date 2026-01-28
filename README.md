@@ -45,6 +45,24 @@ Run the validation script to check compliance:
 
 For more details, see [INSTALL](/INSTALL.md).
 
+## Agent Definitions
+
+The `agents/` directory contains agent definition files that describe roles and behaviors for the agent factory system:
+
+**Core Agents:**
+- **Architect.md** - Spec Author + System Designer
+- **Builder.md** - Implementer / Artifact Producer
+- **Skeptic.md** - Adversarial Reviewer / Breaker
+- **Editor.md** - Clarity + Structure Editor
+- **ProjectManager.md** - Packaging + Orchestration
+- **CitationOfficer.md** - Evidence Auditor + Claim Tracker
+- **ChatGPT.md** - Generalist Execution Agent
+
+**Specialisms** (in `specialisms/` directory):
+- **Researcher.md** - Research work standards
+- **Coder.md** - Code artifact standards
+- **CitationManager.md** - Citation handling standards
+
 ## Getting involved
 If for any reason you wish or need to get involved, please start by reading our [CODE OF CONDUCT](/CODE_OF_CONDUCT.md) 
 and the [CONTRIBUTING](/.github/CONTRIBUTING.md) guide.
