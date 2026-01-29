@@ -110,24 +110,18 @@ if [ -f "agents.yaml" ]; then
     # TEST-003-1: Check each agent has at least one tag
     run_test "TEST-003-1" \
         "Verify each agent has at least one tag" \
-        "[ -z \"\$(awk '/  - id:/{flag=1; next} flag && /tags:/{flag=2; next} flag==2 && /^[[:space:]]*-/{flag=0; next} flag==2 && /^  - id:/{print \"no_tags\"; flag=0}' agents.yaml | grep no_tags)\" ]"
+        "python scripts/validate_agents_yaml.py --check-tags-present --file agents.yaml"
     
     # TEST-003-2: Check agent IDs are unique
     run_test "TEST-003-2" \
         "Verify agent IDs are unique in agents.yaml" \
-        "! grep 'id:' agents.yaml | awk '{print \$2}' | sed 's/\"//g' | sort | uniq -d | grep -q ."
+        "python scripts/validate_agents_yaml.py --check-unique-ids --file agents.yaml"
     
     # TEST-003-3: Verify tags are from allowed list
     if grep -q 'allowed_tags:' agents.yaml; then
-        # Extract allowed tags and agent tags, then compare
-        allowed_tags=$(awk '/^allowed_tags:/,/^# / {if (/^  - /) print $2}' agents.yaml | tr '\n' '|' | sed 's/|$//')
-        if [ -n "$allowed_tags" ]; then
-            run_test "TEST-003-3" \
-                "Verify all tags are from allowed list" \
-                "! awk '/^agents:/,/^# Validation/ {if (/^    tags:/) {flag=1; next} if (flag && /^      - /) {print \$2} if (flag && /^    [a-z_]/) flag=0}' agents.yaml | grep -vE \"^($allowed_tags)\$\" | grep -q ."
-        else
-            echo "Note: No allowed_tags found - skipping TEST-003-3"
-        fi
+        run_test "TEST-003-3" \
+            "Verify all tags are from allowed list" \
+            "python scripts/validate_agents_yaml.py --check-tags-allowed --file agents.yaml"
     else
         echo "Note: No allowed_tags defined in agents.yaml - skipping TEST-003-3"
     fi
