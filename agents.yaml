@@ -30,6 +30,44 @@ agents:
     created_date: "2026-01-28"
     last_modified: "2026-01-28"
 
+  - id: "tester-001"
+    name: "Tester"
+    description: "Test Creator + Quality Validator - Creates comprehensive test suites, validates test coverage, ensures quality gates are met through systematic testing"
+    version: "1.0.0"
+    tags:
+      - testing
+      - quality
+      - automation
+    required_headings:
+      - "Purpose"
+      - "Inputs"
+      - "Outputs"
+      - "Behavior"
+      - "Constraints"
+    file_path: "agents/Tester.md"
+    status: "active"
+    created_date: "2026-01-29"
+    last_modified: "2026-01-29"
+
+  - id: "security-reviewer-001"
+    name: "SecurityReviewer"
+    description: "Security Analyst + Compliance Auditor - Identifies security vulnerabilities, enforces security best practices, ensures compliance with security standards"
+    version: "1.0.0"
+    tags:
+      - security
+      - analysis
+      - quality
+    required_headings:
+      - "Purpose"
+      - "Inputs"
+      - "Outputs"
+      - "Behavior"
+      - "Constraints"
+    file_path: "agents/SecurityReviewer.md"
+    status: "active"
+    created_date: "2026-01-29"
+    last_modified: "2026-01-29"
+
 # Validation rules
 validation_rules:
   # MUST requirements
@@ -40,8 +78,6 @@ validation_rules:
       test: "check_required_headings"
     - rule: "All agents MUST have at least one tag"
       test: "check_tags_present"
-    - rule: "All agent files MUST be flat files (no nested directories)"
-      test: "check_flat_structure"
     - rule: "All agent file paths MUST exist"
       test: "check_file_exists"
   
@@ -66,6 +102,8 @@ allowed_tags:
   - monitoring
   - integration
   - utility
+  - security
+  - quality
 
 # Required headings for agent documentation files
 required_headings:

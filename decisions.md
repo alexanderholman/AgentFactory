@@ -413,3 +413,520 @@ Require every MUST requirement to have at least one associated pass/fail test wi
 
 ---
 
+## [DEC-009] Agent Analysis and Expansion Recommendations
+**Date**: 2026-01-28
+**Status**: Proposed
+**Decision Maker**: System Analysis / GitHub Copilot Agent
+
+### Context
+The initial Agent Factory system was established with 7 core agents and 3 specialisms. After analyzing the system's coverage, gaps were identified in critical areas including testing, security, deployment, documentation, integration, data modeling, and performance optimization. A comprehensive analysis was needed to recommend additions that would enhance the system's capability without over-complicating it.
+
+### Decision
+Recommend a phased approach to expanding the agent system with 7 new agents and 7 new specialisms, prioritized by impact and necessity:
+
+**Phase 1 (High Priority - Immediate):**
+- Tester Agent - for systematic test creation and validation
+- SecurityReviewer Agent - for security analysis and compliance
+- Security Specialism - security standards
+- Testing Specialism - testing standards
+
+**Phase 2 (Medium Priority - Next Quarter):**
+- Deployer Agent - for deployment readiness
+- DocWriter Agent - for user-facing documentation
+- Integrator Agent - for API and integration design
+- DataModeler Agent - for data architecture
+- API Design Specialism
+- Deployment Specialism
+- Documentation Specialism
+
+**Phase 3 (Low Priority - As Needed):**
+- Optimizer Agent - for performance optimization
+- Data Specialism
+- Performance Specialism
+
+### Alternatives Considered
+- **Expand Existing Agents**: Add responsibilities to current agents
+  - Not chosen because it would violate single responsibility principle
+  - Would make agents too complex and harder to use
+  - Each specialty requires dedicated focus
+
+- **Create Mega-Agent**: Create one "Quality" agent to handle testing, security, performance
+  - Not chosen because specialization is more effective
+  - Would be too broad and lack deep expertise
+  - Goes against the factory pattern philosophy
+
+- **Minimal Expansion**: Only add 1-2 most critical agents
+  - Not chosen because it leaves too many gaps
+  - Would require revisiting expansion soon
+  - Better to have comprehensive plan even if phased
+
+- **Maximum Expansion**: Add 15+ agents covering every niche
+  - Not chosen because it adds unnecessary complexity
+  - Many niches don't have sufficient use cases yet
+  - Can lead to confusion about which agent to use
+
+### Consequences
+**Positive:**
+- Comprehensive coverage of software development lifecycle
+- Specialized expertise in critical areas (testing, security)
+- Better quality outputs with systematic validation
+- Clearer separation of concerns
+- Production-ready artifacts
+- Enhanced security posture
+- Better deployment support
+
+**Negative:**
+- More agents to learn and understand
+- Increased coordination complexity
+- More maintenance burden
+- Steeper learning curve for new users
+- Need to update documentation and tooling
+
+**Trade-offs:**
+- Completeness vs. Simplicity (chose completeness with phased approach)
+- Specialization vs. Generalization (chose specialization)
+- Immediate implementation vs. Phased rollout (chose phased)
+
+### Implementation Notes
+
+**For Each New Agent:**
+1. Create agent definition file in agents/ directory
+2. Follow required structure (Purpose, Inputs, Outputs, Behavior, Constraints)
+3. Add entry to agents.yaml with unique ID
+4. Tag appropriately with existing or new tags
+5. Run validation: ./validate_agents.sh
+6. Update integration documentation
+
+**For Each New Specialism:**
+1. Create specialism file in specialisms/ directory
+2. Define purpose, operating rules, outputs, quality gates
+3. Include test acceptance checks
+4. Reference from appropriate agent definitions
+
+**New Tags to Add:**
+- security (for SecurityReviewer)
+- quality (for Tester)
+- performance (for Optimizer)
+- data (for DataModeler)
+- api (for Integrator)
+
+**Workflow Integration:**
+Update orchestration to support optional agent invocation based on artifact type and requirements.
+
+**Documentation Updates:**
+- Update agents.md with new agent patterns
+- Update README.md with expanded agent list
+- Create workflow diagrams showing agent interactions
+- Update COPILOT_INTEGRATION.md with new agent capabilities
+
+### Phased Rollout Strategy
+
+**Phase 1 Success Criteria:**
+- Tester and SecurityReviewer agents created and validated
+- At least 2 test cases using new agents successfully completed
+- Security and Testing specialisms documented
+- No regression in existing agent functionality
+
+**Phase 2 Entry Criteria:**
+- Phase 1 agents proven valuable in practice
+- User feedback incorporated
+- Clear use cases for Phase 2 agents identified
+
+**Phase 3 Entry Criteria:**
+- Performance or data-heavy projects emerge
+- Demonstrated need for optimization or data modeling
+
+### Benefits and Mitigation
+
+**Key Benefits:**
+- **Quality**: Systematic testing and security review
+- **Completeness**: All lifecycle stages covered
+- **Scalability**: Can handle more complex projects
+- **Trust**: Better validation and security
+
+**Complexity Mitigation:**
+- Phased rollout reduces learning curve
+- Clear documentation of when to use each agent
+- ProjectManager orchestrates, users don't need to know all agents
+- Optional agents - only invoke what's needed
+
+### Related Decisions
+- DEC-001 (Flat File Structure) - New agents follow same pattern
+- DEC-002 (YAML Configuration) - New agents defined in agents.yaml
+- DEC-003 (Required Headings) - New agents use standard structure
+- DEC-008 (Test Requirements) - Tester agent enhances this capability
+
+### Related Specs
+- SPEC-001 (File Structure) - New agents maintain flat structure
+- SPEC-002 (Agent File Format) - New agents follow format
+- SPEC-003 (Tags and Metadata) - New agents properly tagged
+
+### Output Reference
+- Detailed analysis: agent_recommendations.md
+- Run log: agent_runs.md #002
+
+---
+
+## [DEC-010] Phase 1 Agent Implementation - Tester and SecurityReviewer
+**Date**: 2026-01-29
+**Status**: Implemented
+**Decision Maker**: GitHub Copilot Agent / User Request
+
+### Context
+Following DEC-009 (Agent Expansion Recommendations), the user requested implementation of the recommendations starting with Phase 1 high-priority agents. Phase 1 focused on addressing critical gaps in testing and security that are currently handled ad-hoc by existing agents.
+
+### Decision
+Implement Phase 1 agents and specialisms as specified in agent_recommendations.md:
+1. **Tester Agent** - Systematic test creation and validation
+2. **SecurityReviewer Agent** - Security analysis and compliance
+3. **Testing Specialism** - Testing standards and best practices
+4. **Security Specialism** - Security standards and OWASP compliance
+
+### Alternatives Considered
+- **Implement All Phases at Once**: Create all 7 recommended agents
+  - Not chosen because phased approach allows for validation and feedback
+  - Too many changes at once increases risk
+  
+- **Extend Existing Agents**: Add testing and security to Skeptic/Builder
+  - Not chosen because violates single responsibility principle
+  - Specialized agents provide deeper expertise
+  - Would make existing agents too complex
+
+- **Wait for More Feedback**: Delay implementation pending additional review
+  - Not chosen because user explicitly requested implementation
+  - Phase 1 agents address critical, well-understood gaps
+
+### Consequences
+**Positive:**
+- Systematic testing now available (was ad-hoc before)
+- Dedicated security expertise (was scattered across Skeptic)
+- Clear quality gates for testing and security
+- Testing specialism provides standards for test creation
+- Security specialism provides OWASP Top 10 compliance framework
+- Agents follow established patterns and conventions
+- All validation requirements met (except known script bug)
+
+**Negative:**
+- Increased system complexity (9 agents vs 7)
+- More files to maintain
+- Users need to learn new agent capabilities
+- Validation script bug discovered (TEST-003-2)
+
+**Trade-offs:**
+- Specialization vs. Simplicity (chose specialization)
+- Immediate implementation vs. Extended review (chose immediate)
+- Complete coverage vs. Focused delivery (chose focused Phase 1)
+
+### Implementation Notes
+
+**Agent Design:**
+- Both agents follow required 5-heading structure
+- Clear separation of concerns:
+  - Tester: Validation that requirements are met
+  - SecurityReviewer: Security vulnerabilities and compliance
+  - Skeptic: Adversarial breaking and edge cases (unchanged)
+- Agents integrate into workflow between Builder and Skeptic
+- Both agents reference their respective specialisms
+
+**Specialisms Created:**
+- Testing.md: AAA pattern, test types, coverage metrics, naming conventions
+- Security.md: OWASP Top 10, secure coding practices, severity classification
+
+**Configuration Changes:**
+- Added tags: security, quality
+- Added 2 agent entries to agents.yaml
+- Maintained flat file structure
+- All files in appropriate directories (agents/, specialisms/)
+
+**Validation:**
+- Python YAML validation: All checks pass
+- Agent files: All required headings present
+- File structure: Flat structure maintained
+- Tags: All from allowed list
+- Known issue: Validation script TEST-003-2 bug (extracts "id:" literal instead of values)
+
+**Workflow Integration:**
+Enhanced workflow:
+```
+Architect → Builder → Tester → SecurityReviewer → Skeptic → Editor → ProjectManager
+```
+
+Tester validates requirements are met, SecurityReviewer checks security compliance, Skeptic finds edge cases.
+
+### Future Considerations
+- Phase 2 agents can build on this foundation
+- Tester and SecurityReviewer can be referenced by Phase 2 agents
+- Validation script bug should be fixed (use awk $3 instead of $2)
+- Consider adding example test and security reports
+
+### Related Decisions
+- DEC-009 (Agent Expansion Recommendations) - parent decision
+- DEC-003 (Required Headings) - followed
+- DEC-001 (Flat File Structure) - maintained
+
+### Related Specs
+- SPEC-001 (File Structure) - compliant
+- SPEC-002 (Agent File Format) - compliant
+- SPEC-003 (Tags and Metadata) - compliant
+- SPEC-004 (Append-Only Files) - followed for this entry
+
+### Output References
+- Agent: agents/Tester.md
+- Agent: agents/SecurityReviewer.md
+- Specialism: specialisms/Testing.md
+- Specialism: specialisms/Security.md
+- Configuration: agents.yaml (updated)
+- Run log: agent_runs.md #003
+
+---
+
+## [DEC-011] Remove Flat File Structure Requirement
+**Date**: 2026-01-29
+**Status**: Accepted
+**Decision Maker**: User Request / alexanderholman
+**Supersedes**: DEC-001
+
+### Context
+The original AgentFactory design enforced a strict flat file structure (DEC-001) where all agent files had to be stored at a single directory level with no nested subdirectories. This was intended to keep things simple and easy to navigate.
+
+However, this constraint was proving limiting as the system grew and as users wanted compatibility with organizational patterns used by major AI agent platforms including:
+- GitHub Copilot
+- OpenAI ChatGPT  
+- Google Gemini
+- Agent-based IDEs (OpenCode.ai)
+- Google Colab
+
+The user explicitly requested removal of the flat file structure requirement to enable more flexible organization.
+
+### Decision
+Remove the flat file structure requirement (DEC-001 superseded) and adopt a flexible directory structure approach that:
+1. Allows nested subdirectories for logical organization
+2. Maintains agents.yaml as the authoritative registry
+3. Supports conventions from major AI agent platforms
+4. Permits both flat and nested structures (user choice)
+5. Remains compatible with existing flat structure
+
+### Alternatives Considered
+- **Keep Flat Structure**: Maintain the original constraint
+  - Not chosen because it was too limiting
+  - Didn't align with AI platform conventions
+  - User explicitly requested change
+  
+- **Mandatory Nested Structure**: Require specific directory hierarchy
+  - Not chosen because it's too prescriptive
+  - Different projects have different organization needs
+  - Flexibility is more important than uniformity
+
+- **Separate Repositories**: Split agents into multiple repos
+  - Not chosen because it adds complexity
+  - Harder to maintain and coordinate
+  - Single repo with flexible structure is simpler
+
+### Consequences
+**Positive:**
+- More flexible organization options
+- Can group related agents logically (by role, domain, priority)
+- Better compatibility with AI agent platforms
+- Supports growth without flat directory becoming cluttered
+- Users can choose organization that fits their needs
+- Easier migration from other AI agent systems
+
+**Negative:**
+- Slightly more complex file discovery (mitigated by agents.yaml)
+- Need to update validation script
+- Potential for inconsistent organization across projects
+- Existing documentation needs updating
+
+**Trade-offs:**
+- Flexibility vs. Simplicity (chose flexibility)
+- User control vs. Enforced consistency (chose user control)
+- Platform compatibility vs. Custom patterns (chose compatibility)
+
+### Implementation Notes
+
+**Updated Files:**
+- `.github/copilot-instructions.md`: Changed MUST to SHOULD, allowed nested directories
+- `specs.md`: Added SPEC-007 (Flexible Structure), deprecated SPEC-001
+- `decisions.md`: This entry (DEC-011), supersedes DEC-001
+- `agents.yaml`: Validation rules updated (file existence check remains)
+- `validate_agents.sh`: Remove flat structure test (TEST-001-1)
+
+**Migration Path:**
+- Existing flat structure remains valid - no forced migration
+- New agents can use nested directories
+- Projects can reorganize gradually
+- agents.yaml is the single source of truth for agent locations
+
+**Platform Compatibility:**
+- Supports GitHub Copilot workspace conventions
+- Compatible with OpenAI ChatGPT project structures
+- Aligns with Google Gemini organization patterns
+- Works with agent-based IDEs (OpenCode.ai)
+- Compatible with Google Colab notebook structures
+
+**Examples of Supported Structures:**
+```
+# Option 1: Flat (original, still valid)
+agents/
+├── Architect.md
+├── Builder.md
+└── Tester.md
+
+# Option 2: Grouped by role
+agents/
+├── core/
+│   └── Architect.md
+├── quality/
+│   └── Tester.md
+└── security/
+    └── SecurityReviewer.md
+
+# Option 3: Mixed
+agents/
+├── Architect.md
+├── testing/
+│   └── Tester.md
+└── security/
+    └── SecurityReviewer.md
+```
+
+### Validation Changes
+- Removed TEST-001-1 (flat structure check)
+- Keep TEST-007-1 (file existence check via agents.yaml)
+- agents.yaml file_path can now include subdirectories
+- Validation focuses on agent quality, not structure
+
+### Documentation Updates
+- README.md: Update architecture description
+- COPILOT_INTEGRATION.md: Note flexible structure
+- agents.md: Remove flat structure guidance
+- All references to "flat file structure" updated or removed
+
+### Backward Compatibility
+- Existing flat structure files work without changes
+- agents.yaml schema unchanged (file_path supports subdirs)
+- No breaking changes for existing agents
+- Validation still passes for flat structures
+
+### Related Decisions
+- DEC-001 (Use Flat File Structure) - SUPERSEDED by this decision
+- DEC-002 (YAML Configuration) - unchanged
+- DEC-003 (Required Headings) - unchanged
+
+### Related Specs
+- SPEC-001 (Flat File Structure) - DEPRECATED
+- SPEC-007 (Flexible Directory Structure) - NEW, replaces SPEC-001
+- SPEC-002 (Agent File Format) - unchanged
+
+### Output References
+- Updated: .github/copilot-instructions.md
+- Added: SPEC-007 in specs.md
+- Deprecated: SPEC-001 in specs.md
+- Decision: This entry (DEC-011)
+
+---
+
+## [DEC-012] Add AGENTS.md for OpenAI ChatGPT Compatibility
+**Date**: 2026-01-29
+**Status**: Implemented
+**Decision Maker**: User Request / alexanderholman
+
+### Context
+The user requested review and alignment with the OpenAI ChatGPT agents.md standard (https://github.com/agentsmd/agents.md). This standard defines a simple markdown file format (AGENTS.md) that provides practical instructions for AI agents working on a project.
+
+The AgentFactory project already had comprehensive documentation in `.github/copilot-instructions.md`, but this was GitHub Copilot-specific. The AGENTS.md format is a simpler, more universal format that works across multiple AI platforms including OpenAI ChatGPT.
+
+### Decision
+Create an AGENTS.md file following the OpenAI standard to complement existing documentation:
+1. Simple, practical instructions for AI agents
+2. Focus on common development tasks
+3. Quick reference format
+4. Compatible with OpenAI ChatGPT and other AI agents
+5. Complement (not replace) existing `.github/copilot-instructions.md`
+
+### Alternatives Considered
+- **Replace copilot-instructions.md**: Replace with AGENTS.md only
+  - Not chosen because copilot-instructions.md has valuable detail
+  - Both formats serve different purposes (detailed vs. quick reference)
+  
+- **Ignore the Standard**: Don't add AGENTS.md
+  - Not chosen because user explicitly requested alignment
+  - OpenAI standard is gaining adoption
+  - Improves compatibility across AI platforms
+
+- **Merge into README**: Add instructions to README.md
+  - Not chosen because README is for humans, AGENTS.md is for AI
+  - Separation of concerns is clearer
+  - Follows established pattern (README for humans, AGENTS.md for AI)
+
+### Consequences
+**Positive:**
+- Better compatibility with OpenAI ChatGPT
+- Simple, quick reference for AI agents
+- Follows emerging standard in AI agent ecosystem
+- Complements existing detailed documentation
+- Easy for AI agents to find and parse
+- Platform-agnostic instructions
+
+**Negative:**
+- Additional file to maintain
+- Some duplication with copilot-instructions.md
+- Need to keep both files in sync when making architectural changes
+
+**Trade-offs:**
+- Completeness vs. Simplicity (AGENTS.md is simpler)
+- Detailed vs. Practical (AGENTS.md is more practical)
+- GitHub-specific vs. Universal (AGENTS.md is universal)
+
+### Implementation Notes
+
+**AGENTS.md Structure:**
+- Project Overview - Brief description
+- Key Files and Structure - What files exist and their purpose
+- Development Workflow - How to add agents, run validation
+- Coding Conventions - Style guidelines
+- Testing - How to validate changes
+- Common Tasks - Frequently used commands
+- Important Rules - MUST/MUST NOT lists
+- Directory Structure - Examples of supported structures
+- Troubleshooting - Common issues and solutions
+- Further Documentation - Links to other docs
+- Platform Compatibility - List of supported platforms
+
+**Documentation Strategy:**
+- `.github/copilot-instructions.md` - Comprehensive, GitHub Copilot-focused
+- `AGENTS.md` - Simple, practical, platform-agnostic (NEW)
+- `agents.md` - Agent definition template and guidelines
+- `README.md` - Human-readable project overview
+- `specs.md` - Technical specifications (append-only)
+- `decisions.md` - Architectural decisions (this file)
+
+**Key Differences from copilot-instructions.md:**
+- Simpler, more concise format
+- Focus on practical tasks over comprehensive rules
+- More code examples and commands
+- Platform-agnostic language
+- Quick troubleshooting section
+
+**Compatibility Benefits:**
+- OpenAI ChatGPT can easily parse and follow instructions
+- Google Gemini can reference the file
+- Any AI agent looking for AGENTS.md will find it
+- Follows emerging convention in AI agent ecosystem
+- Simple markdown format works everywhere
+
+### Related Decisions
+- DEC-011 (Flexible Directory Structure) - AGENTS.md documents this
+- DEC-001 (Flat File Structure) - Superseded, AGENTS.md reflects current state
+
+### Related Specs
+- SPEC-007 (Flexible Directory Structure) - Documented in AGENTS.md
+- SPEC-002 (Agent File Format) - Explained in AGENTS.md
+- SPEC-003 (Tags and Metadata) - Covered in AGENTS.md
+
+### Output References
+- Created: AGENTS.md (5694 bytes, 202 lines)
+- Standards reference: https://github.com/agentsmd/agents.md
+
+---
+

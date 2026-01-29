@@ -232,3 +232,98 @@ All agent outputs, documentation, and reports SHOULD use Markdown format for con
 
 ---
 
+## [SPEC-007] Flexible Directory Structure
+**Date**: 2026-01-29
+**Status**: Approved
+**Priority**: SHOULD
+**Supersedes**: SPEC-001
+
+### Description
+The Agent Factory repository SHOULD use a flexible directory structure that allows for logical organization while maintaining compatibility with major AI platforms including GitHub Copilot, OpenAI ChatGPT, Google Gemini, agent-based IDEs (OpenCode.ai), and Google Colab.
+
+### Requirements
+- SHOULD organize agent files in the `agents/` directory or subdirectories
+- MAY use nested subdirectories for logical grouping (e.g., by role, domain, priority)
+- SHOULD use self-documenting directory names
+- MUST still use agents.yaml as the central registry for all agents
+- SHOULD follow conventions compatible with major AI agent platforms
+- MAY organize specialisms in nested subdirectories under `specialisms/`
+
+### Examples of Allowed Structures
+```
+agents/
+├── core/
+│   ├── Architect.md
+│   ├── Builder.md
+│   └── ProjectManager.md
+├── quality/
+│   ├── Tester.md
+│   ├── SecurityReviewer.md
+│   └── Skeptic.md
+└── documentation/
+    ├── Editor.md
+    └── DocWriter.md
+```
+
+Or flat structure (still allowed):
+```
+agents/
+├── Architect.md
+├── Builder.md
+├── Tester.md
+└── ...
+```
+
+Or mixed:
+```
+agents/
+├── Architect.md
+├── Builder.md
+├── testing/
+│   ├── Tester.md
+│   └── test_utilities/
+│       └── helpers.md
+└── security/
+    └── SecurityReviewer.md
+```
+
+### Tests
+- **Test ID**: TEST-007-1
+  - **Description**: Verify all agent files referenced in agents.yaml exist
+  - **Pass Criteria**: All file_path entries in agents.yaml resolve to existing files
+  - **Fail Criteria**: Any file_path in agents.yaml does not exist
+
+- **Test ID**: TEST-007-2
+  - **Description**: Verify agents/ directory exists
+  - **Pass Criteria**: agents/ directory exists in repository root
+  - **Fail Criteria**: agents/ directory is missing
+
+### Related Specs
+- SPEC-001 (Deprecated by this spec)
+- SPEC-002 (Agent File Format) - still applies
+- SPEC-003 (Tags and Metadata) - still applies
+
+### Migration Notes
+- Existing flat structure is still valid and allowed
+- Projects may gradually reorganize into nested structures
+- agents.yaml remains the authoritative registry
+- No breaking changes to existing agent files
+
+---
+
+## [SPEC-001] Agent Factory File Structure (DEPRECATED)
+**Date**: 2026-01-28
+**Status**: Deprecated
+**Deprecated Date**: 2026-01-29
+**Superseded By**: SPEC-007
+**Priority**: N/A (was MUST)
+
+### Deprecation Notice
+This specification has been superseded by SPEC-007 (Flexible Directory Structure). The flat file structure requirement has been removed to allow for better organization and compatibility with major AI agent platforms including GitHub Copilot, OpenAI ChatGPT, Google Gemini, agent-based IDEs (OpenCode.ai), and Google Colab.
+
+**Original Description**: The Agent Factory repository MUST maintain a flat file structure for all agent-related files.
+
+**Why Deprecated**: The rigid flat structure constraint was limiting organization flexibility and was not aligned with conventions used by major AI agent platforms. The new flexible structure (SPEC-007) allows for both flat and nested organizations while maintaining compatibility and discoverability through agents.yaml.
+
+---
+
