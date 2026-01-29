@@ -567,3 +567,116 @@ Update orchestration to support optional agent invocation based on artifact type
 
 ---
 
+## [DEC-010] Phase 1 Agent Implementation - Tester and SecurityReviewer
+**Date**: 2026-01-29
+**Status**: Implemented
+**Decision Maker**: GitHub Copilot Agent / User Request
+
+### Context
+Following DEC-009 (Agent Expansion Recommendations), the user requested implementation of the recommendations starting with Phase 1 high-priority agents. Phase 1 focused on addressing critical gaps in testing and security that are currently handled ad-hoc by existing agents.
+
+### Decision
+Implement Phase 1 agents and specialisms as specified in agent_recommendations.md:
+1. **Tester Agent** - Systematic test creation and validation
+2. **SecurityReviewer Agent** - Security analysis and compliance
+3. **Testing Specialism** - Testing standards and best practices
+4. **Security Specialism** - Security standards and OWASP compliance
+
+### Alternatives Considered
+- **Implement All Phases at Once**: Create all 7 recommended agents
+  - Not chosen because phased approach allows for validation and feedback
+  - Too many changes at once increases risk
+  
+- **Extend Existing Agents**: Add testing and security to Skeptic/Builder
+  - Not chosen because violates single responsibility principle
+  - Specialized agents provide deeper expertise
+  - Would make existing agents too complex
+
+- **Wait for More Feedback**: Delay implementation pending additional review
+  - Not chosen because user explicitly requested implementation
+  - Phase 1 agents address critical, well-understood gaps
+
+### Consequences
+**Positive:**
+- Systematic testing now available (was ad-hoc before)
+- Dedicated security expertise (was scattered across Skeptic)
+- Clear quality gates for testing and security
+- Testing specialism provides standards for test creation
+- Security specialism provides OWASP Top 10 compliance framework
+- Agents follow established patterns and conventions
+- All validation requirements met (except known script bug)
+
+**Negative:**
+- Increased system complexity (9 agents vs 7)
+- More files to maintain
+- Users need to learn new agent capabilities
+- Validation script bug discovered (TEST-003-2)
+
+**Trade-offs:**
+- Specialization vs. Simplicity (chose specialization)
+- Immediate implementation vs. Extended review (chose immediate)
+- Complete coverage vs. Focused delivery (chose focused Phase 1)
+
+### Implementation Notes
+
+**Agent Design:**
+- Both agents follow required 5-heading structure
+- Clear separation of concerns:
+  - Tester: Validation that requirements are met
+  - SecurityReviewer: Security vulnerabilities and compliance
+  - Skeptic: Adversarial breaking and edge cases (unchanged)
+- Agents integrate into workflow between Builder and Skeptic
+- Both agents reference their respective specialisms
+
+**Specialisms Created:**
+- Testing.md: AAA pattern, test types, coverage metrics, naming conventions
+- Security.md: OWASP Top 10, secure coding practices, severity classification
+
+**Configuration Changes:**
+- Added tags: security, quality
+- Added 2 agent entries to agents.yaml
+- Maintained flat file structure
+- All files in appropriate directories (agents/, specialisms/)
+
+**Validation:**
+- Python YAML validation: All checks pass
+- Agent files: All required headings present
+- File structure: Flat structure maintained
+- Tags: All from allowed list
+- Known issue: Validation script TEST-003-2 bug (extracts "id:" literal instead of values)
+
+**Workflow Integration:**
+Enhanced workflow:
+```
+Architect → Builder → Tester → SecurityReviewer → Skeptic → Editor → ProjectManager
+```
+
+Tester validates requirements are met, SecurityReviewer checks security compliance, Skeptic finds edge cases.
+
+### Future Considerations
+- Phase 2 agents can build on this foundation
+- Tester and SecurityReviewer can be referenced by Phase 2 agents
+- Validation script bug should be fixed (use awk $3 instead of $2)
+- Consider adding example test and security reports
+
+### Related Decisions
+- DEC-009 (Agent Expansion Recommendations) - parent decision
+- DEC-003 (Required Headings) - followed
+- DEC-001 (Flat File Structure) - maintained
+
+### Related Specs
+- SPEC-001 (File Structure) - compliant
+- SPEC-002 (Agent File Format) - compliant
+- SPEC-003 (Tags and Metadata) - compliant
+- SPEC-004 (Append-Only Files) - followed for this entry
+
+### Output References
+- Agent: agents/Tester.md
+- Agent: agents/SecurityReviewer.md
+- Specialism: specialisms/Testing.md
+- Specialism: specialisms/Security.md
+- Configuration: agents.yaml (updated)
+- Run log: agent_runs.md #003
+
+---
+
