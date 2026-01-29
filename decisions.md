@@ -826,3 +826,107 @@ agents/
 
 ---
 
+## [DEC-012] Add AGENTS.md for OpenAI ChatGPT Compatibility
+**Date**: 2026-01-29
+**Status**: Implemented
+**Decision Maker**: User Request / alexanderholman
+
+### Context
+The user requested review and alignment with the OpenAI ChatGPT agents.md standard (https://github.com/agentsmd/agents.md). This standard defines a simple markdown file format (AGENTS.md) that provides practical instructions for AI agents working on a project.
+
+The AgentFactory project already had comprehensive documentation in `.github/copilot-instructions.md`, but this was GitHub Copilot-specific. The AGENTS.md format is a simpler, more universal format that works across multiple AI platforms including OpenAI ChatGPT.
+
+### Decision
+Create an AGENTS.md file following the OpenAI standard to complement existing documentation:
+1. Simple, practical instructions for AI agents
+2. Focus on common development tasks
+3. Quick reference format
+4. Compatible with OpenAI ChatGPT and other AI agents
+5. Complement (not replace) existing `.github/copilot-instructions.md`
+
+### Alternatives Considered
+- **Replace copilot-instructions.md**: Replace with AGENTS.md only
+  - Not chosen because copilot-instructions.md has valuable detail
+  - Both formats serve different purposes (detailed vs. quick reference)
+  
+- **Ignore the Standard**: Don't add AGENTS.md
+  - Not chosen because user explicitly requested alignment
+  - OpenAI standard is gaining adoption
+  - Improves compatibility across AI platforms
+
+- **Merge into README**: Add instructions to README.md
+  - Not chosen because README is for humans, AGENTS.md is for AI
+  - Separation of concerns is clearer
+  - Follows established pattern (README for humans, AGENTS.md for AI)
+
+### Consequences
+**Positive:**
+- Better compatibility with OpenAI ChatGPT
+- Simple, quick reference for AI agents
+- Follows emerging standard in AI agent ecosystem
+- Complements existing detailed documentation
+- Easy for AI agents to find and parse
+- Platform-agnostic instructions
+
+**Negative:**
+- Additional file to maintain
+- Some duplication with copilot-instructions.md
+- Need to keep both files in sync when making architectural changes
+
+**Trade-offs:**
+- Completeness vs. Simplicity (AGENTS.md is simpler)
+- Detailed vs. Practical (AGENTS.md is more practical)
+- GitHub-specific vs. Universal (AGENTS.md is universal)
+
+### Implementation Notes
+
+**AGENTS.md Structure:**
+- Project Overview - Brief description
+- Key Files and Structure - What files exist and their purpose
+- Development Workflow - How to add agents, run validation
+- Coding Conventions - Style guidelines
+- Testing - How to validate changes
+- Common Tasks - Frequently used commands
+- Important Rules - MUST/MUST NOT lists
+- Directory Structure - Examples of supported structures
+- Troubleshooting - Common issues and solutions
+- Further Documentation - Links to other docs
+- Platform Compatibility - List of supported platforms
+
+**Documentation Strategy:**
+- `.github/copilot-instructions.md` - Comprehensive, GitHub Copilot-focused
+- `AGENTS.md` - Simple, practical, platform-agnostic (NEW)
+- `agents.md` - Agent definition template and guidelines
+- `README.md` - Human-readable project overview
+- `specs.md` - Technical specifications (append-only)
+- `decisions.md` - Architectural decisions (this file)
+
+**Key Differences from copilot-instructions.md:**
+- Simpler, more concise format
+- Focus on practical tasks over comprehensive rules
+- More code examples and commands
+- Platform-agnostic language
+- Quick troubleshooting section
+
+**Compatibility Benefits:**
+- OpenAI ChatGPT can easily parse and follow instructions
+- Google Gemini can reference the file
+- Any AI agent looking for AGENTS.md will find it
+- Follows emerging convention in AI agent ecosystem
+- Simple markdown format works everywhere
+
+### Related Decisions
+- DEC-011 (Flexible Directory Structure) - AGENTS.md documents this
+- DEC-001 (Flat File Structure) - Superseded, AGENTS.md reflects current state
+
+### Related Specs
+- SPEC-007 (Flexible Directory Structure) - Documented in AGENTS.md
+- SPEC-002 (Agent File Format) - Explained in AGENTS.md
+- SPEC-003 (Tags and Metadata) - Covered in AGENTS.md
+
+### Output References
+- Created: AGENTS.md (5694 bytes, 202 lines)
+- Standards reference: https://github.com/agentsmd/agents.md
+
+---
+

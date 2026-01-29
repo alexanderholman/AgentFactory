@@ -84,6 +84,7 @@ and the [CONTRIBUTING](/.github/CONTRIBUTING.md) guide.
 Should you need further support not covered above, please take a look at the [SUPPORT](/.github/SUPPORT.md) guide.
 
 Further documentation:
+- [AGENTS.md](/AGENTS.md) - Quick reference for AI agents (OpenAI ChatGPT compatible)
 - [agents.md](/agents.md) - Agent documentation rules and templates
 - [agents.yaml](/agents.yaml) - Agent configuration schema
 - [specs.md](/specs.md) - Technical specifications (append-only)

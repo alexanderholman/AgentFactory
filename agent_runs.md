@@ -231,3 +231,91 @@ Successfully implemented Phase 1 high-priority recommendations by creating Teste
 
 ---
 
+## Run #004 - Add AGENTS.md for OpenAI ChatGPT Compatibility
+**Date**: 2026-01-29 01:44:00 UTC
+**Status**: Success
+**Duration**: 8m 30s
+**Executor**: GitHub Copilot Agent
+
+### Inputs
+- Action: Review and align with OpenAI ChatGPT agents.md standard
+- Reference: https://github.com/agentsmd/agents.md
+- Context: User requested alignment with OpenAI AGENTS.md format
+
+### Outputs
+- Created AGENTS.md (5,694 bytes, 202 lines)
+- Added DEC-012 to decisions.md
+- Added Run #004 to agent_runs.md
+
+### Result Summary
+Successfully created AGENTS.md file following the OpenAI ChatGPT agents.md standard. The file provides simple, practical instructions for AI agents working on the AgentFactory project, complementing the existing comprehensive documentation in .github/copilot-instructions.md.
+
+### Key Features of AGENTS.md
+- **Project Overview**: Brief description of AgentFactory
+- **Key Files Structure**: Quick reference to important files
+- **Development Workflow**: Step-by-step agent creation process
+- **Coding Conventions**: Style guidelines for markdown, YAML, append-only files
+- **Testing**: Validation commands and checks
+- **Common Tasks**: Frequently used commands and operations
+- **Important Rules**: Clear MUST/MUST NOT lists
+- **Directory Structure**: Examples of flat and nested structures
+- **Troubleshooting**: Solutions to common issues
+- **Platform Compatibility**: List of supported AI platforms
+
+### Platform Compatibility
+The AGENTS.md format is recognized by:
+- OpenAI ChatGPT (primary target)
+- GitHub Copilot (reads AGENTS.md as fallback)
+- Google Gemini
+- Google Colab
+- Agent-based IDEs (OpenCode.ai)
+- Any AI agent following the agents.md convention
+
+### Documentation Strategy
+The project now has layered documentation:
+1. **AGENTS.md** - Simple, practical quick reference (NEW)
+2. **.github/copilot-instructions.md** - Comprehensive GitHub Copilot guide
+3. **agents.md** - Agent definition template and guidelines
+4. **README.md** - Human-readable project overview
+5. **specs.md** - Technical specifications (append-only)
+6. **decisions.md** - Architectural decisions (append-only)
+
+Each serves a different purpose and audience, with minimal duplication.
+
+### Design Choices
+- **Practical over Comprehensive**: Focus on common tasks
+- **Code Examples**: Include actual commands to run
+- **Quick Reference**: Easy to scan and find information
+- **Troubleshooting Section**: Address known issues upfront
+- **Platform-Agnostic**: Language works for any AI agent
+
+### Issues Encountered
+None
+
+### Actions Taken
+- Reviewed OpenAI agents.md standard and examples
+- Created AGENTS.md following the format
+- Structured content for AI agent consumption
+- Included practical examples and commands
+- Documented common workflows
+- Added troubleshooting section
+- Listed platform compatibility
+- Documented decision in DEC-012
+- Added this run log entry
+
+### Quality Metrics
+- File created: 1
+- Lines added: 202
+- Size: 5.7 KB
+- Sections: 11 main sections
+- Code examples: Multiple bash and Python snippets
+- Validation: File follows standard markdown format
+
+### Related References
+- Standard: https://github.com/agentsmd/agents.md
+- Decision: DEC-012 (AGENTS.md Addition)
+- Previous Run: Run #003 (Phase 1 Implementation)
+- Related Decision: DEC-011 (Flexible Directory Structure)
+
+---
+
