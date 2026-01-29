@@ -680,3 +680,149 @@ Tester validates requirements are met, SecurityReviewer checks security complian
 
 ---
 
+## [DEC-011] Remove Flat File Structure Requirement
+**Date**: 2026-01-29
+**Status**: Accepted
+**Decision Maker**: User Request / alexanderholman
+**Supersedes**: DEC-001
+
+### Context
+The original AgentFactory design enforced a strict flat file structure (DEC-001) where all agent files had to be stored at a single directory level with no nested subdirectories. This was intended to keep things simple and easy to navigate.
+
+However, this constraint was proving limiting as the system grew and as users wanted compatibility with organizational patterns used by major AI agent platforms including:
+- GitHub Copilot
+- OpenAI ChatGPT  
+- Google Gemini
+- Agent-based IDEs (OpenCode.ai)
+- Google Colab
+
+The user explicitly requested removal of the flat file structure requirement to enable more flexible organization.
+
+### Decision
+Remove the flat file structure requirement (DEC-001 superseded) and adopt a flexible directory structure approach that:
+1. Allows nested subdirectories for logical organization
+2. Maintains agents.yaml as the authoritative registry
+3. Supports conventions from major AI agent platforms
+4. Permits both flat and nested structures (user choice)
+5. Remains compatible with existing flat structure
+
+### Alternatives Considered
+- **Keep Flat Structure**: Maintain the original constraint
+  - Not chosen because it was too limiting
+  - Didn't align with AI platform conventions
+  - User explicitly requested change
+  
+- **Mandatory Nested Structure**: Require specific directory hierarchy
+  - Not chosen because it's too prescriptive
+  - Different projects have different organization needs
+  - Flexibility is more important than uniformity
+
+- **Separate Repositories**: Split agents into multiple repos
+  - Not chosen because it adds complexity
+  - Harder to maintain and coordinate
+  - Single repo with flexible structure is simpler
+
+### Consequences
+**Positive:**
+- More flexible organization options
+- Can group related agents logically (by role, domain, priority)
+- Better compatibility with AI agent platforms
+- Supports growth without flat directory becoming cluttered
+- Users can choose organization that fits their needs
+- Easier migration from other AI agent systems
+
+**Negative:**
+- Slightly more complex file discovery (mitigated by agents.yaml)
+- Need to update validation script
+- Potential for inconsistent organization across projects
+- Existing documentation needs updating
+
+**Trade-offs:**
+- Flexibility vs. Simplicity (chose flexibility)
+- User control vs. Enforced consistency (chose user control)
+- Platform compatibility vs. Custom patterns (chose compatibility)
+
+### Implementation Notes
+
+**Updated Files:**
+- `.github/copilot-instructions.md`: Changed MUST to SHOULD, allowed nested directories
+- `specs.md`: Added SPEC-007 (Flexible Structure), deprecated SPEC-001
+- `decisions.md`: This entry (DEC-011), supersedes DEC-001
+- `agents.yaml`: Validation rules updated (file existence check remains)
+- `validate_agents.sh`: Remove flat structure test (TEST-001-1)
+
+**Migration Path:**
+- Existing flat structure remains valid - no forced migration
+- New agents can use nested directories
+- Projects can reorganize gradually
+- agents.yaml is the single source of truth for agent locations
+
+**Platform Compatibility:**
+- Supports GitHub Copilot workspace conventions
+- Compatible with OpenAI ChatGPT project structures
+- Aligns with Google Gemini organization patterns
+- Works with agent-based IDEs (OpenCode.ai)
+- Compatible with Google Colab notebook structures
+
+**Examples of Supported Structures:**
+```
+# Option 1: Flat (original, still valid)
+agents/
+├── Architect.md
+├── Builder.md
+└── Tester.md
+
+# Option 2: Grouped by role
+agents/
+├── core/
+│   └── Architect.md
+├── quality/
+│   └── Tester.md
+└── security/
+    └── SecurityReviewer.md
+
+# Option 3: Mixed
+agents/
+├── Architect.md
+├── testing/
+│   └── Tester.md
+└── security/
+    └── SecurityReviewer.md
+```
+
+### Validation Changes
+- Removed TEST-001-1 (flat structure check)
+- Keep TEST-007-1 (file existence check via agents.yaml)
+- agents.yaml file_path can now include subdirectories
+- Validation focuses on agent quality, not structure
+
+### Documentation Updates
+- README.md: Update architecture description
+- COPILOT_INTEGRATION.md: Note flexible structure
+- agents.md: Remove flat structure guidance
+- All references to "flat file structure" updated or removed
+
+### Backward Compatibility
+- Existing flat structure files work without changes
+- agents.yaml schema unchanged (file_path supports subdirs)
+- No breaking changes for existing agents
+- Validation still passes for flat structures
+
+### Related Decisions
+- DEC-001 (Use Flat File Structure) - SUPERSEDED by this decision
+- DEC-002 (YAML Configuration) - unchanged
+- DEC-003 (Required Headings) - unchanged
+
+### Related Specs
+- SPEC-001 (Flat File Structure) - DEPRECATED
+- SPEC-007 (Flexible Directory Structure) - NEW, replaces SPEC-001
+- SPEC-002 (Agent File Format) - unchanged
+
+### Output References
+- Updated: .github/copilot-instructions.md
+- Added: SPEC-007 in specs.md
+- Deprecated: SPEC-001 in specs.md
+- Decision: This entry (DEC-011)
+
+---
+

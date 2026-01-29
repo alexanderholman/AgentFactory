@@ -78,8 +78,6 @@ validation_rules:
       test: "check_required_headings"
     - rule: "All agents MUST have at least one tag"
       test: "check_tags_present"
-    - rule: "All agent files MUST be flat files (no nested directories)"
-      test: "check_flat_structure"
     - rule: "All agent file paths MUST exist"
       test: "check_file_exists"
   

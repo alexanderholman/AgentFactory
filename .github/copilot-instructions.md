@@ -1,15 +1,16 @@
 # GitHub Copilot Workspace Instructions
 
 ## Repository Overview
-AgentFactory is a framework for defining, documenting, and managing AI agents using a simple flat-file structure. It enforces standards for agent documentation, maintains append-only logs for specifications and decisions, and provides validation tools to ensure consistency.
+AgentFactory is a framework for defining, documenting, and managing AI agents using a flexible, organized structure compatible with major AI platforms. It enforces standards for agent documentation, maintains append-only logs for specifications and decisions, and provides validation tools to ensure consistency.
 
 ## Key Architecture Principles
 
-### 1. Flat File Structure (MUST)
-- All agent files MUST be stored in the `agents/` directory at a single level
-- NO nested subdirectories beyond one level are allowed
-- All configuration and documentation files are stored at the repository root
-- This ensures simplicity and ease of navigation
+### 1. Flexible Directory Structure (SHOULD)
+- Agent files SHOULD be organized in the `agents/` directory
+- Nested subdirectories are ALLOWED for better organization (e.g., `agents/testing/`, `agents/security/`)
+- Configuration and documentation files are typically stored at the repository root
+- Organization SHOULD follow conventions compatible with GitHub Copilot, OpenAI ChatGPT, Google Gemini, agent-based IDEs (OpenCode.ai), and Google Colab
+- Directory structure SHOULD be logical and self-documenting
 
 ### 2. Required Agent File Format (MUST)
 Every agent file MUST include these headings in this exact order:
@@ -106,7 +107,6 @@ Located in `agents/` directory:
 ```
 
 This script validates:
-- Flat file structure (no nested directories)
 - Required headings in agent files
 - Unique agent IDs
 - Proper tag usage
@@ -142,7 +142,6 @@ This script validates:
 - Mark assumptions clearly with `[ASSUMPTION]` tags
 
 ### What You MUST NOT Do
-- Create nested directories beyond one level
 - Modify or delete content in append-only files (specs.md, decisions.md, agent_runs.md)
 - Fabricate citations or test results
 - Remove or override working code without explicit reason

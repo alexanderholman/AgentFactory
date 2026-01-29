@@ -11,15 +11,15 @@ as per the other documents feel free to adapt it to fit your needs, adding, modi
 <!-- All badges representing the current status of the application below should they exist -->
 
 ## What is AgentFactory
-AgentFactory is a framework for defining, documenting, and managing AI agents using a simple flat-file structure. It enforces standards for agent documentation, maintains append-only logs for specifications and decisions, and provides validation tools to ensure consistency.
+AgentFactory is a framework for defining, documenting, and managing AI agents using a flexible, organized structure. It enforces standards for agent documentation, maintains append-only logs for specifications and decisions, and provides validation tools to ensure consistency.
 
 ### Key Features
-- **Flat File Structure**: Simple, navigable file organization
+- **Flexible Directory Structure**: Organized file structure supporting both flat and nested directories
 - **Standardized Documentation**: Required headings and formatting for all agents
 - **Append-Only Logs**: Historical record of specs, runs, and decisions
 - **Validation Tools**: Automated tests for all MUST requirements
 - **No Fabrication Policy**: All citations and results must be verifiable
-- **GitHub Copilot Integration**: Seamlessly works with GitHub Copilot Workspace
+- **AI Platform Compatibility**: Works with GitHub Copilot, OpenAI ChatGPT, Google Gemini, Google Colab, and agent-based IDEs
 
 For detailed specifications, see [specs.md](/specs.md).
 
