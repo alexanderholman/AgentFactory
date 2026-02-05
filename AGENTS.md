@@ -24,6 +24,10 @@ AgentFactory is a framework for defining, documenting, and managing AI agents. T
   - `decisions.md` - Architectural decisions
   - `agent_runs.md` - Execution logs
 
+- **traits/** - Reusable behavioral modules for agents/specialisms/tasks
+- **workflows/** - Task-level execution patterns and validation gates
+- **tasks/** - Recurring and stateful task tracking (cadence, wip, triage)
+
 ## Development Workflow
 
 ### Adding a New Agent
