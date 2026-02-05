@@ -123,7 +123,7 @@ if [ -f "agents.yaml" ]; then
     # TEST-003-2: Check agent IDs are unique
     run_test "TEST-003-2" \
         "Verify agent IDs are unique in agents.yaml" \
-        "! grep 'id:' agents.yaml | awk '{print \$2}' | sed 's/\"//g' | sort | uniq -d | grep -q ."
+        "! grep 'id:' agents.yaml | awk '{print \$3}' | sed 's/\"//g' | sort | uniq -d | grep -q ."
     
     # TEST-003-3: Verify tags are from allowed list
     if grep -q 'allowed_tags:' agents.yaml; then

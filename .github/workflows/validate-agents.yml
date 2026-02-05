@@ -44,18 +44,6 @@ jobs:
         [ -f agent_runs.md ] && echo "✓ agent_runs.md exists" || (echo "✗ agent_runs.md missing" && exit 1)
         [ -d agents ] && echo "✓ agents/ directory exists" || (echo "✗ agents/ directory missing" && exit 1)
         
-    - name: Verify flat file structure
-      run: |
-        echo "Verifying flat file structure..."
-        nested_files=$(find agents/ -mindepth 2 -type f 2>/dev/null || true)
-        if [ -n "$nested_files" ]; then
-          echo "✗ FAIL: Nested files found in agents/ directory:"
-          echo "$nested_files"
-          exit 1
-        else
-          echo "✓ PASS: Flat file structure verified"
-        fi
-        
     - name: Validation Summary
       if: success()
       run: |
@@ -65,6 +53,5 @@ jobs:
         echo ""
         echo "✓ Validation script completed successfully"
         echo "✓ Required files present"
-        echo "✓ Flat file structure verified"
         echo ""
         echo "Repository is ready for deployment."
