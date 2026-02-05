@@ -4,50 +4,6 @@
 
 ---
 
-## [DEC-013] Add OpenCodeManager Agent for General Orchestration
-**Date**: 2026-02-05
-**Status**: Implemented
-**Decision Maker**: User Request / OpenCodeManager setup
-
-### Context
-OpenCode is being used as a general-purpose CLI agent, and we need a dedicated manager role to coordinate session flow, enforce AgentFactory rules, and drive consistent handoffs between specialized agents.
-
-### Decision
-Add a new agent definition named OpenCodeManager to serve as the orchestration and session-control role for OpenCode usage. This agent focuses on intake, planning, safe execution, and role handoffs while enforcing repository constraints and append-only logging rules.
-
-### Alternatives Considered
-- **Reuse ProjectManager**: Not chosen because ProjectManager is optimized for packaging and handoffs at the end of the pipeline, not continuous session control.
-- **Rely on ChatGPT Generalist**: Not chosen because it lacks an explicit orchestration contract and clear session-control responsibilities.
-
-### Consequences
-**Positive:**
-- Clear, reusable orchestration contract for OpenCode sessions
-- Better consistency in tool usage and repo hygiene
-- Easier handoff between specialized roles
-
-**Negative:**
-- Additional agent to maintain
-- Overlap risk with ProjectManager responsibilities
-
-**Trade-offs:**
-- Central control vs. flexibility (improves consistency but adds process)
-
-### Implementation Notes
-- Added agent file: `agents/opencode/OpenCodeManager.md`
-- Registered in `agents.yaml` with ID `opencode-manager-001`
-- Uses existing allowed tags to avoid schema changes
-
-### Related Decisions
-- DEC-011 (Flexible Directory Structure)
-- DEC-012 (AGENTS.md for OpenAI compatibility)
-
-### Related Specs
-- SPEC-002 (Agent File Format)
-- SPEC-003 (Tags and Metadata)
-- SPEC-007 (Flexible Directory Structure)
-
----
-
 ## Decision Record Format
 
 Each decision entry MUST follow this format:
@@ -971,5 +927,49 @@ Create an AGENTS.md file following the OpenAI standard to complement existing do
 ### Output References
 - Created: AGENTS.md (5694 bytes, 202 lines)
 - Standards reference: https://github.com/agentsmd/agents.md
+
+---
+
+## [DEC-013] Add OpenCodeManager Agent for General Orchestration
+**Date**: 2026-02-05
+**Status**: Implemented
+**Decision Maker**: User Request / OpenCodeManager setup
+
+### Context
+OpenCode is being used as a general-purpose CLI agent, and we need a dedicated manager role to coordinate session flow, enforce AgentFactory rules, and drive consistent handoffs between specialized agents.
+
+### Decision
+Add a new agent definition named OpenCodeManager to serve as the orchestration and session-control role for OpenCode usage. This agent focuses on intake, planning, safe execution, and role handoffs while enforcing repository constraints and append-only logging rules.
+
+### Alternatives Considered
+- **Reuse ProjectManager**: Not chosen because ProjectManager is optimized for packaging and handoffs at the end of the pipeline, not continuous session control.
+- **Rely on ChatGPT Generalist**: Not chosen because it lacks an explicit orchestration contract and clear session-control responsibilities.
+
+### Consequences
+**Positive:**
+- Clear, reusable orchestration contract for OpenCode sessions
+- Better consistency in tool usage and repo hygiene
+- Easier handoff between specialized roles
+
+**Negative:**
+- Additional agent to maintain
+- Overlap risk with ProjectManager responsibilities
+
+**Trade-offs:**
+- Central control vs. flexibility (improves consistency but adds process)
+
+### Implementation Notes
+- Added agent file: `agents/opencode/OpenCodeManager.md`
+- Registered in `agents.yaml` with ID `opencode-manager-001`
+- Uses existing allowed tags to avoid schema changes
+
+### Related Decisions
+- DEC-011 (Flexible Directory Structure)
+- DEC-012 (AGENTS.md for OpenAI compatibility)
+
+### Related Specs
+- SPEC-002 (Agent File Format)
+- SPEC-003 (Tags and Metadata)
+- SPEC-007 (Flexible Directory Structure)
 
 ---
