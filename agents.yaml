@@ -68,6 +68,25 @@ agents:
     created_date: "2026-01-29"
     last_modified: "2026-01-29"
 
+  - id: "opencode-manager-001"
+    name: "OpenCodeManager"
+    description: "Orchestration + Session Control - Coordinates OpenCode sessions, enforces AgentFactory rules, and manages role handoffs"
+    version: "1.0.0"
+    tags:
+      - automation
+      - integration
+      - utility
+    required_headings:
+      - "Purpose"
+      - "Inputs"
+      - "Outputs"
+      - "Behavior"
+      - "Constraints"
+    file_path: "agents/opencode/OpenCodeManager.md"
+    status: "active"
+    created_date: "2026-02-05"
+    last_modified: "2026-02-05"
+
 # Validation rules
 validation_rules:
   # MUST requirements
