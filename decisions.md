@@ -2,8 +2,6 @@
 
 **NOTE: This file is append-only. Do not modify or remove existing entries. Only add new decisions at the end.**
 
----
-
 ## Decision Record Format
 
 Each decision entry MUST follow this format:
