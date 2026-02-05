@@ -58,7 +58,7 @@ This validates:
 - File paths exist
 - Markdown format
 
-Expected: 25/26 tests pass (1 known bug in TEST-003-2, unrelated to agent quality)
+Expected: all tests pass
 
 ### Python Validation (Alternative)
 
@@ -195,9 +195,7 @@ The agents.yaml file paths should match the actual file locations.
 - Confirm file path in agents.yaml matches actual file location
 
 ### Known Issues
-- TEST-003-2 may fail due to script bug (uses awk $2 instead of $3)
-- This doesn't affect agent quality - Python validation confirms IDs are unique
-- Will be fixed in future update to validation script
+- None currently tracked
 
 ## Further Documentation
 
