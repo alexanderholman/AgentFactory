@@ -49,32 +49,40 @@ run_test() {
     echo ""
 }
 
-# Helper: verify there are no files nested beyond one directory level under agents/
-check_no_nested_files() {
-    if find agents/ -mindepth 2 -type f 2>/dev/null | grep -q .; then
-        # Found files deeper than one level -> fail
-        return 1
-    else
-        # No such files -> pass
-        return 0
+# Helper: verify all agent files referenced in agents.yaml exist
+check_agent_files_exist() {
+    if [ ! -f "agents.yaml" ]; then
+        return 0  # No agents.yaml, nothing to check
     fi
+    
+    # Extract file_path entries from agents.yaml and check they exist
+    local missing_files=0
+    while IFS= read -r filepath; do
+        if [ -n "$filepath" ] && [ ! -f "$filepath" ]; then
+            echo "Missing file: $filepath"
+            missing_files=$((missing_files + 1))
+        fi
+    done < <(grep 'file_path:' agents.yaml | awk '{print $2}' | tr -d '"')
+    
+    [ $missing_files -eq 0 ]
 }
 
-# TEST-001-1: Verify no nested directories beyond one level
-echo "=== SPEC-001: File Structure ==="
+# TEST-007-1: Verify agent files exist (replaces flat structure test)
+echo "=== SPEC-007: Flexible Directory Structure ==="
 if [ -d "agents" ]; then
-    run_test "TEST-001-1" \
-        "Verify flat file structure (no nested directories)" \
-        "check_no_nested_files"
+    run_test "TEST-007-1" \
+        "Verify all agent files referenced in agents.yaml exist" \
+        "check_agent_files_exist"
 else
-    echo "Note: agents/ directory does not exist yet - skipping TEST-001-1"
+    echo "Note: agents/ directory does not exist yet - skipping TEST-007-1"
     echo ""
 fi
 
 # TEST-002-1: Verify required headings in agent files (presence and order)
 echo "=== SPEC-002: Agent File Format ==="
-if [ -d "agents" ] && [ "$(find agents/ -maxdepth 1 -name '*.md' -type f 2>/dev/null | wc -l)" -gt 0 ]; then
-    for file in agents/*.md; do
+if [ -d "agents" ] && [ "$(find agents/ -name '*.md' -type f 2>/dev/null | wc -l)" -gt 0 ]; then
+    # Find all .md files in agents/ directory (including nested)
+    while IFS= read -r file; do
         [ -f "$file" ] || continue
         # Check both presence and order of headings
         run_test "TEST-002-1" \
@@ -88,15 +96,15 @@ if [ -d "agents" ] && [ "$(find agents/ -maxdepth 1 -name '*.md' -type f 2>/dev/
              [ \$(grep -n '^## Inputs' '$file' | cut -d: -f1) -lt \$(grep -n '^## Outputs' '$file' | cut -d: -f1) ] && \
              [ \$(grep -n '^## Outputs' '$file' | cut -d: -f1) -lt \$(grep -n '^## Behavior' '$file' | cut -d: -f1) ] && \
              [ \$(grep -n '^## Behavior' '$file' | cut -d: -f1) -lt \$(grep -n '^## Constraints' '$file' | cut -d: -f1) ]"
-    done
+    done < <(find agents/ -name '*.md' -type f)
     
     # TEST-002-2: Verify heading format follows markdown H2 convention
-    for file in agents/*.md; do
+    while IFS= read -r file; do
         [ -f "$file" ] || continue
         run_test "TEST-002-2" \
             "Verify H2 heading format in $(basename $file)" \
             "grep -E '^## (Purpose|Inputs|Outputs|Behavior|Constraints)$' '$file' > /dev/null"
-    done
+    done < <(find agents/ -name '*.md' -type f)
 else
     echo "Note: No agent markdown files found yet - skipping TEST-002-1 and TEST-002-2"
     echo ""

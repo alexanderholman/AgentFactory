@@ -6,10 +6,10 @@ This document defines the rules and structure for agent files in the Agent Facto
 ## Rules for Agent Files
 
 ### MUST Requirements
-1. **Flat File Structure**: All agent files MUST be stored as flat files in the repository root or a single-level `agents/` directory. No nested subdirectories are allowed.
-   - **Test**: Verify no agent files exist in nested directories (depth > 1)
-   - **Pass**: All agent files are at root or one level deep
-   - **Fail**: Any agent file found in nested directories
+1. **Flexible File Structure**: Agent files MUST be stored under the `agents/` directory and MAY be nested in subdirectories. All `file_path` values in `agents.yaml` MUST point to existing files.
+   - **Test**: Verify all agent file paths defined in `agents.yaml` exist
+   - **Pass**: Every referenced file exists
+   - **Fail**: Any referenced file is missing
 
 2. **Required Headings**: All agent files MUST include the following headings in order:
    - `## Purpose` - What the agent does
@@ -91,9 +91,11 @@ Tags are defined in agents.yaml and help categorize this agent.
 
 To validate agent files, run the following checks:
 
-1. **Structure Check**: Verify flat file structure
+1. **Structure Check**: Verify all referenced agent files exist
    ```bash
-   find agents/ -mindepth 2 -type f && echo "FAIL: Nested files found" || echo "PASS"
+   grep 'file_path:' agents.yaml | awk '{print $2}' | tr -d '"' | while read -r path; do
+     [ -f "$path" ] || echo "FAIL: Missing $path"
+   done
    ```
 
 2. **Heading Check**: Verify required headings exist in correct order
@@ -134,7 +136,7 @@ To add a new agent:
 
 1. Ensure the `agents/` directory exists (create it if needed: `mkdir -p agents`)
 2. Define the agent in `agents.yaml` with all required fields
-3. Create the agent markdown file in the flat file structure (in `agents/` directory)
+3. Create the agent markdown file under `agents/` (subdirectories allowed)
 4. Ensure all required headings are present
 5. Add appropriate tags from the allowed list
 6. Run validation tests
