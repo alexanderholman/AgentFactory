@@ -4,7 +4,7 @@
 This document explains how AgentFactory integrates with GitHub Copilot and GitHub Copilot Workspace to provide enhanced AI agent capabilities.
 
 ## What is AgentFactory?
-AgentFactory is a framework for defining, documenting, and managing AI agents using a simple flat-file structure. It provides:
+AgentFactory is a framework for defining, documenting, and managing AI agents using a flexible flat-file structure. It provides:
 - Standardized agent definitions with required documentation
 - Validation tools to ensure consistency
 - Append-only logs for specifications and decisions
@@ -21,7 +21,7 @@ GitHub Copilot Workspace can leverage AgentFactory's agent definitions to:
    - Apply agent-specific patterns when working on related tasks
 
 2. **Follow Established Patterns**
-   - Respect the flat-file structure constraint
+   - Respect the flexible file structure constraint (agents/ may be nested)
    - Maintain append-only logs (specs.md, decisions.md, agent_runs.md)
    - Use proper tagging conventions ([SPEC], [ASSUMPTION], [RISK], etc.)
    - Enforce required headings in agent documentation
@@ -52,7 +52,7 @@ When asking Copilot to create a new agent:
    - Create the agent file with all required headings (Purpose, Inputs, Outputs, Behavior, Constraints)
    - Add an entry to `agents.yaml` with proper metadata
    - Use appropriate tags from the allowed list
-   - Follow the flat-file structure
+   - Follow the flexible file structure
    - Generate a unique agent ID
 
 3. **Verify the result:**
@@ -136,7 +136,7 @@ Copilot will:
 - **Don't ask Copilot to modify** append-only files (it will append instead)
 - **Don't ask Copilot to fabricate** citations or test results
 - **Don't ask Copilot to remove** required headings from agent files
-- **Don't ask Copilot to create** nested directory structures
+- **Don't ask Copilot to create** agent files outside `agents/`
 
 ## Example Copilot Prompts
 
@@ -179,7 +179,7 @@ GitHub Actions automatically runs validation on:
 - Manual workflow dispatch
 
 The workflow validates:
-- File structure (flat hierarchy)
+- File structure (agents/ path correctness)
 - Required headings in agent files
 - Unique agent IDs
 - Proper tag usage
@@ -230,11 +230,11 @@ All tests passed!
 4. ## Behavior
 5. ## Constraints
 
-**Issue: Nested directory error**
+**Issue: Missing agent file**
 ```
-✗ FAIL: Nested files found in agents/ directory
+✗ FAIL: Missing file: agents/quality/Tester.md
 ```
-**Solution:** Move all agent files to the `agents/` directory root level, not in subdirectories.
+**Solution:** Ensure the file exists at the path defined in agents.yaml (subdirectories allowed).
 
 **Issue: Duplicate agent ID**
 ```
