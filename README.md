@@ -56,6 +56,23 @@ All 22 validation tests should pass before committing changes.
 
 GitHub Actions automatically validates agent definitions on pull requests.
 
+### Agent Memory (OpenCode continuity)
+AgentFactory supports AgentMemory for cross-session continuity and action traces.
+
+```bash
+# Install memlog (once)
+cd ~/AgentMemory && ./install.sh --force
+
+# Health check wiring
+memlog doctor --root ~/opencode
+
+# Validate memory links/artifacts
+memlog validate --root ~/opencode --strict
+```
+
+Use the workflow in `workflows/opencode-agent-memory.md` when integrating memory-aware execution.
+Use the operational playbook in `skills/AgentMemory.md` for install/doctor/log/load command conventions.
+
 For more details, see [INSTALL](/INSTALL.md).
 
 ## Agent Definitions

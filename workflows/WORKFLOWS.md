@@ -34,3 +34,8 @@ Use this template:
 - <check 1>
 - <check 2>
 ```
+
+## Included Workflows
+- `workflows/pr-review-and-merge.md`
+- `workflows/projectspec-builder-specialism-routing.md`
+- `workflows/opencode-agent-memory.md`

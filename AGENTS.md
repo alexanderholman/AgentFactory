@@ -25,6 +25,7 @@ AgentFactory is a framework for defining, documenting, and managing AI agents. T
   - `agent_runs.md` - Execution logs
 
 - **traits/** - Reusable behavioral modules for agents/specialisms/tasks
+- **skills/** - Operational skill guides for repeatable runtime setup/use
 - **workflows/** - Task-level execution patterns and validation gates
 - **tasks/** - Recurring and stateful task tracking (cadence, wip, triage)
 
@@ -138,6 +139,18 @@ tail -50 decisions.md
 
 # View recent agent runs
 tail -50 agent_runs.md
+```
+
+### Verify Agent Memory Wiring
+```bash
+# Install or refresh memlog command
+cd ~/AgentMemory && ./install.sh --force
+
+# Check runtime wiring
+memlog doctor --root ~/opencode --strict
+
+# Validate continuity links and raw artifacts
+memlog validate --root ~/opencode --strict
 ```
 
 ### Update Agent Metadata
