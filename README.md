@@ -52,7 +52,7 @@ Run the validation script to check compliance:
 ./validate_agents.sh
 ```
 
-All 22 validation tests should pass before committing changes.
+All validation tests should pass before committing changes.
 
 GitHub Actions automatically validates agent definitions on pull requests.
 
