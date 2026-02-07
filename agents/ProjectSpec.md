@@ -10,6 +10,7 @@ Define project-level specifications and orchestration plans, then apply one or m
 - Selected specialism files from `specialisms/`.
   - `specialisms/SoftwareSpec.md`
   - `specialisms/AcademicSubmission.md`
+  - `specialisms/CondensedMatterInterfaces.md` (for interface energetics and DFT/MLP screening tasks)
 
 ## Outputs
 - Project specification with clear scope and assumptions.
@@ -20,6 +21,7 @@ Define project-level specifications and orchestration plans, then apply one or m
 
 ## Behavior
 - Operate as `ProjectSpec + <Specialism>`.
+- Session-start memory policy: run `memlog load` to recover recent continuity context.
 - Startup policy: read `tasks/wip.md` and `tasks/triage.md` before planning.
 - Planning policy: use read-only Planner passes where appropriate before Builder execution.
 - Planner trigger defaults: complexity >= 3 tasks, cross-system coupling, or high-risk changes.
@@ -28,6 +30,10 @@ Define project-level specifications and orchestration plans, then apply one or m
 - Delegation policy: use Builder sub-agents only for execution tasks.
 - Routing rule: `Builder + SoftwareSpec` for software and infrastructure implementation.
 - Routing rule: `Builder + AcademicSubmission` for manuscript structuring and submission packaging.
+- Routing rule: `CondensedMatterSpecialist + CondensedMatterInterfaces` for computational materials interface tasks (ARTEMIS/RAFFLE generation policy, DFT/MLP ranking checks, MLI dataset readiness).
+- Routing rule: resolve repeatable requests through `workflows/nl-to-script-routing.md` and `scripts/registry.yaml` before ad-hoc execution.
+- Policy: if no script exists for a repeatable action, create a reusable script first.
+- Policy: for model-required tasks, prefer local model training/inference when feasibility gates pass; otherwise use deterministic scripted fallback.
 - Planner scope is analysis/spec only (no file edits, no command-side effects).
 - Optional non-builder reviews (Tester/Skeptic/Editor/ProjectManager) are synthesized by ProjectSpec unless explicitly requested.
 - Keep decisions explicit and assumptions tagged `[ASSUMPTION]`.

@@ -153,6 +153,30 @@ memlog doctor --root ~/opencode --strict
 memlog validate --root ~/opencode --strict
 ```
 
+### Resolve Task to Script (Only Write Once)
+```bash
+# List registered automations
+python3 -c "import yaml; d=yaml.safe_load(open('scripts/registry.yaml')); print('\n'.join(sorted(s['id'] for s in d.get('scripts', []))))"
+
+# Resolve NL request to top script matches
+python3 scripts/resolve.py --query "validate agent definitions" --top-k 3
+
+# Route and run from NL (dry-run by default)
+python3 scripts/route_and_run.py --query "validate agent definitions"
+
+# Execute selected route with explicit parameters
+python3 scripts/route_and_run.py --script-id resolve-script --arg request="validate agent definitions" --execute
+
+# Validate script registry schema quickly
+python3 -c "import yaml; d=yaml.safe_load(open('scripts/registry.yaml')); assert 'scripts' in d and isinstance(d['scripts'], list)"
+
+# Run policy workflow checklist
+grep -E "^# Workflow:|^## Workflow ID|^## Sequence|^## Validation" workflows/nl-to-script-routing.md
+
+# Enforce repeatable-task script references
+python3 scripts/check_repeatable_script_refs.py --root .
+```
+
 ### Update Agent Metadata
 1. Edit `agents.yaml` to update metadata
 2. Increment version number
@@ -169,6 +193,9 @@ memlog validate --root ~/opencode --strict
 - Run validation before committing
 - Append to append-only files (never modify existing content)
 - Mark assumptions with `[ASSUMPTION]` tags
+- Enforce "Only Write Once": check for an existing script/workflow before ad-hoc execution
+- If a repeatable action has no script, write the script first, then execute it
+- Parameterize scripts for reuse; do not hardcode one-off values
 
 ### MUST NOT DO
 - Modify or delete content in append-only files (specs.md, decisions.md, agent_runs.md)
@@ -176,6 +203,7 @@ memlog validate --root ~/opencode --strict
 - Use duplicate agent IDs
 - Create agents without required headings
 - Skip validation before committing
+- Repeat a manual multi-step action when it can be scripted and reused
 
 ## Directory Structure
 

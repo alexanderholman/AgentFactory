@@ -18,6 +18,7 @@ AgentFactory is a framework for defining, documenting, and managing AI agents us
 - **Standardized Documentation**: Required headings and formatting for all agents
 - **Append-Only Logs**: Historical record of specs, runs, and decisions
 - **Validation Tools**: Automated tests for all MUST requirements
+- **Only Write Once Automation**: Script-first execution with registry-based routing for repeatable tasks
 - **No Fabrication Policy**: All citations and results must be verifiable
 - **AI Platform Compatibility**: Works with GitHub Copilot, OpenAI ChatGPT, Google Gemini, Google Colab, and agent-based IDEs
 
@@ -50,6 +51,11 @@ This repository is fully configured for GitHub Copilot Workspace:
 Run the validation script to check compliance:
 ```bash
 ./validate_agents.sh
+```
+
+For script-first routing policy assets:
+```bash
+python3 -c "import yaml; yaml.safe_load(open('scripts/registry.yaml'))"
 ```
 
 All 22 validation tests should pass before committing changes.

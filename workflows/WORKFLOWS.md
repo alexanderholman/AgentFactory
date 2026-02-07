@@ -39,3 +39,4 @@ Use this template:
 - `workflows/pr-review-and-merge.md`
 - `workflows/projectspec-builder-specialism-routing.md`
 - `workflows/opencode-agent-memory.md`
+- `workflows/nl-to-script-routing.md`

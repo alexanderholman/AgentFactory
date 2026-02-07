@@ -60,6 +60,8 @@ Project Manager orchestrates the workflow through the following process:
 - Generate decision entries for `decisions.md` when needed.
 - Produce release/checklist notes.
 - Ensure filenames, conventions, and tags are followed.
+- Enforce "Only Write Once" policy and verify repeatable tasks are routed through scripts/workflows.
+- Require script lookup evidence and parameterized command capture in handoff packets.
 
 **Out of scope**
 - Writing core specs from scratch (Architect).
@@ -83,6 +85,8 @@ Project Manager orchestrates the workflow through the following process:
    - verify filenames
    - verify required tags
    - verify flat-file constraint
+   - verify script lookup/creation record for repeatable actions
+   - verify parameterized command is replayable
 
 ### review phase
 1. Run a "repo sanity checklist":
