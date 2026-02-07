@@ -68,6 +68,26 @@ agents:
     created_date: "2026-01-29"
     last_modified: "2026-01-29"
 
+  - id: "project-spec-001"
+    name: "ProjectSpec"
+    description: "Project specification and orchestration agent that composes domain specialisms like SoftwareSpec and AcademicSubmission"
+    version: "1.0.0"
+    tags:
+      - analysis
+      - integration
+      - documentation
+      - quality
+    required_headings:
+      - "Purpose"
+      - "Inputs"
+      - "Outputs"
+      - "Behavior"
+      - "Constraints"
+    file_path: "agents/ProjectSpec.md"
+    status: "active"
+    created_date: "2026-02-05"
+    last_modified: "2026-02-05"
+
   - id: "opencode-manager-001"
     name: "OpenCodeManager"
     description: "Orchestration + Session Control - Coordinates OpenCode sessions, enforces AgentFactory rules, and manages role handoffs"

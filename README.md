@@ -18,6 +18,7 @@ AgentFactory is a framework for defining, documenting, and managing AI agents us
 - **Standardized Documentation**: Required headings and formatting for all agents
 - **Append-Only Logs**: Historical record of specs, runs, and decisions
 - **Validation Tools**: Automated tests for all MUST requirements
+- **Only Write Once Automation**: Script-first execution with registry-based routing for repeatable tasks
 - **No Fabrication Policy**: All citations and results must be verifiable
 - **AI Platform Compatibility**: Works with GitHub Copilot, OpenAI ChatGPT, Google Gemini, Google Colab, and agent-based IDEs
 
@@ -52,9 +53,31 @@ Run the validation script to check compliance:
 ./validate_agents.sh
 ```
 
+For script-first routing policy assets:
+```bash
+python3 -c "import yaml; yaml.safe_load(open('scripts/registry.yaml'))"
+```
+
 All validation tests should pass before committing changes.
 
 GitHub Actions automatically validates agent definitions on pull requests.
+
+### Agent Memory (OpenCode continuity)
+AgentFactory supports AgentMemory for cross-session continuity and action traces.
+
+```bash
+# Install memlog (once)
+cd ~/AgentMemory && ./install.sh --force
+
+# Health check wiring
+memlog doctor --root ~/opencode
+
+# Validate memory links/artifacts
+memlog validate --root ~/opencode --strict
+```
+
+Use the workflow in `workflows/opencode-agent-memory.md` when integrating memory-aware execution.
+Use the operational playbook in `skills/AgentMemory.md` for install/doctor/log/load command conventions.
 
 For more details, see [INSTALL](/INSTALL.md).
 

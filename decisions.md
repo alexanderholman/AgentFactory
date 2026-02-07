@@ -971,3 +971,171 @@ Add a new agent definition named OpenCodeManager to serve as the orchestration a
 - SPEC-007 (Flexible Directory Structure)
 
 ---
+
+## [DEC-018] Adopt Script-First "Only Write Once" Execution Policy
+**Date**: 2026-02-07
+**Status**: Implemented
+**Decision Maker**: OpenCodeManager / User Request
+
+### Context
+The user requested a stricter execution model where agents should operate as natural language to script routing and parameterization, avoid repeated ad-hoc manual actions, and prioritize local model workflows when model-based execution is required.
+
+### Decision
+Adopt an explicit script-first automation policy across AgentFactory:
+1. Agents MUST check for existing scripts/workflows before executing repeatable tasks.
+2. If no script exists for a repeatable action, agents MUST create a reusable script first.
+3. Script execution MUST be parameterized and replayable.
+4. For model-required tasks, agents SHOULD prefer local model training/inference when feasibility gates pass; otherwise use deterministic scripted fallback.
+
+Implementation:
+1. Add trait: `traits/script-first-automation.md`.
+2. Add workflow: `workflows/nl-to-script-routing.md`.
+3. Add script registry: `scripts/registry.yaml`.
+4. Update policy docs and agent behavior files to enforce routing and evidence capture.
+
+### Alternatives Considered
+- **Keep ad-hoc execution as default**
+  - Not chosen because repeatability and consistency degrade over time.
+- **Mandate local model training for every model-related task without gates**
+  - Not chosen because it can be infeasible on constrained hardware/time budgets.
+
+### Consequences
+**Positive:**
+- Stronger reproducibility and lower operational drift.
+- Better human-computer interface for natural language task routing.
+- Clear path to automation reuse and easier validation.
+
+**Negative:**
+- Initial overhead to script and register new repeatable actions.
+- Additional maintenance for script registry metadata.
+
+### Implementation Notes
+- Feasibility gates for local model policy: data availability, hardware budget, runtime budget, acceptance metric definition.
+- Fallback path is deterministic scripted non-ML execution where applicable.
+
+### Related Decisions
+- DEC-017 (Add `hlmn/memory` OpenCode Skill Documentation)
+- DEC-016 (Add ProjectSpec Routing for Condensed Matter Interface Work)
+- DEC-012 (Add AGENTS.md for OpenAI ChatGPT Compatibility)
+
+### Related Specs
+- SPEC-002 (Agent File Format)
+
+### Output References
+- Added: `traits/script-first-automation.md`
+- Added: `workflows/nl-to-script-routing.md`
+- Added: `scripts/registry.yaml`
+- Updated: `AGENTS.md`
+- Updated: `agents.md`
+- Updated: `workflows/WORKFLOWS.md`
+- Updated: `traits/TRAITS.md`
+- Updated: `agents/ProjectSpec.md`
+- Updated: `agents/ProjectManager.md`
+- Updated: `agents/Builder.md`
+- Updated: `agents/ChatGPT.md`
+- Updated: `README.md`
+
+---
+
+---
+
+## [DEC-019] Add NL Script Resolver and CI Enforcement for Repeatable Task References
+**Date**: 2026-02-07
+**Status**: Implemented
+**Decision Maker**: OpenCodeManager / User Request
+
+### Context
+After adopting the script-first policy (DEC-018), enforcement and runtime ergonomics needed concrete tooling so agents could consistently resolve intents to scripts and CI could detect repeatable task documentation that omits script references.
+
+### Decision
+Implement two operational utilities and wire them into validation:
+1. Add `scripts/resolve.py` to map natural language intents to `scripts/registry.yaml` entries.
+2. Add `scripts/check_repeatable_script_refs.py` to fail validation when repeatable tasks are documented without nearby script references.
+3. Add registry entries for both scripts and include the check in `validate_agents.sh` and CI triggers.
+
+### Alternatives Considered
+- **Manual script selection only**
+  - Not chosen because it increases ambiguity and operator drift.
+- **Advisory-only repeatable documentation guidance**
+  - Not chosen because non-enforced policy degrades over time.
+
+### Consequences
+**Positive:**
+- Better natural-language to script selection and parameterization UX.
+- Enforceable policy guardrails for repeatable task documentation.
+- Higher reproducibility and lower manual variance.
+
+**Negative:**
+- Slight additional maintenance burden for script metadata and checks.
+
+### Implementation Notes
+- Repeatable-reference check currently scans markdown task docs under `workflows/` and `tasks/`.
+- Accepted script references include `scripts/...`, `scripts/registry.yaml`, or `[SCRIPT:<id>]`.
+
+### Related Decisions
+- DEC-018 (Adopt Script-First "Only Write Once" Execution Policy)
+- DEC-017 (Add `hlmn/memory` OpenCode Skill Documentation)
+
+### Related Specs
+- SPEC-006 (Markdown Output)
+
+### Output References
+- Added: `scripts/resolve.py`
+- Added: `scripts/check_repeatable_script_refs.py`
+- Updated: `scripts/registry.yaml`
+- Updated: `validate_agents.sh`
+- Updated: `.github/workflows/validate-agents.yml`
+- Updated: `AGENTS.md`
+
+---
+
+---
+
+## [DEC-020] Add `route_and_run` Wrapper for NL-to-Script Execution
+**Date**: 2026-02-07
+**Status**: Implemented
+**Decision Maker**: OpenCodeManager / User Request
+
+### Context
+The script-first policy now had resolver and CI checks, but execution still required separate manual steps (resolve, then run). A single wrapper was needed to improve natural-language HCI and reduce operator friction.
+
+### Decision
+Add `scripts/route_and_run.py` as a wrapper that:
+1. Selects a script from `scripts/registry.yaml` via `--script-id` or NL routing (`--query` / `--intent`).
+2. Applies parameter substitutions for placeholders like `<request>` via `--arg key=value`.
+3. Defaults to dry-run and executes only with `--execute`.
+
+### Alternatives Considered
+- **Keep separate resolve + manual execute steps only**
+  - Not chosen because it adds overhead and increases execution variance.
+- **Execute by default without dry-run**
+  - Not chosen because dry-run default is safer for command transparency.
+
+### Consequences
+**Positive:**
+- More natural NL-to-script operation path.
+- Safer and more transparent execution via rendered-command preview.
+- Better consistency across operators.
+
+**Negative:**
+- Additional script to maintain.
+
+### Implementation Notes
+- Wrapper supports explicit script pinning (`--script-id`) or resolver mode.
+- Missing placeholders fail closed with clear errors.
+
+### Related Decisions
+- DEC-019 (Add NL Script Resolver and CI Enforcement for Repeatable Task References)
+- DEC-018 (Adopt Script-First "Only Write Once" Execution Policy)
+
+### Related Specs
+- SPEC-008 (Script-First Automation)
+
+### Output References
+- Added: `scripts/route_and_run.py`
+- Updated: `scripts/registry.yaml`
+- Updated: `AGENTS.md`
+
+---
+
+---
