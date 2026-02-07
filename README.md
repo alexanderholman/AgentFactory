@@ -56,6 +56,8 @@ Run the validation script to check compliance:
 For script-first routing policy assets:
 ```bash
 python3 -c "import yaml; yaml.safe_load(open('scripts/registry.yaml'))"
+python3 scripts/validate_registry.py --registry scripts/registry.yaml
+python3 scripts/check_dry_run_conventions.py --registry scripts/registry.yaml
 ```
 
 Shortcut wrapper for Forge-style routing:
@@ -63,6 +65,11 @@ Shortcut wrapper for Forge-style routing:
 scripts/forge-route "validate agent definitions"
 scripts/forge-route --execute "validate agent definitions"
 ```
+
+Reference docs:
+- [scripts/route-and-run.md](/scripts/route-and-run.md)
+- [scripts/templates/README.md](/scripts/templates/README.md)
+- [tasks/ml-feasibility-checklist.md](/tasks/ml-feasibility-checklist.md)
 
 All validation tests should pass before committing changes.
 
