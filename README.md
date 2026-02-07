@@ -58,6 +58,12 @@ For script-first routing policy assets:
 python3 -c "import yaml; yaml.safe_load(open('scripts/registry.yaml'))"
 ```
 
+Shortcut wrapper for Forge-style routing:
+```bash
+scripts/forge-route "validate agent definitions"
+scripts/forge-route --execute "validate agent definitions"
+```
+
 All validation tests should pass before committing changes.
 
 GitHub Actions automatically validates agent definitions on pull requests.
