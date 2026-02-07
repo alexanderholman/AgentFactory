@@ -1139,3 +1139,63 @@ Add `scripts/route_and_run.py` as a wrapper that:
 ---
 
 ---
+
+## [DEC-021] Strengthen Script-First Operations with Registry Schema, Capability Matching, and Dry-Run Policy Checks
+**Date**: 2026-02-07
+**Status**: Implemented
+**Decision Maker**: OpenCodeManager / User Request
+
+### Context
+After rolling out script-first routing, we needed stronger operational guardrails to keep automation quality high as the registry grows: schema consistency, better resolver ranking, explicit dry-run execution safety, and reusable authoring templates.
+
+### Decision
+1. Add registry schema validation (`scripts/validate_registry.py`) and enforce it via validation suite.
+2. Add dry-run policy validation (`scripts/check_dry_run_conventions.py`) for execute-intent scripts.
+3. Add `capabilities` metadata to every registry entry and include it in resolver/routing scoring.
+4. Extend repeatable reference checks to include `specs.md` sections marked with repeatable language.
+5. Add script authoring templates and runbook docs (`scripts/templates/*`, `scripts/route-and-run.md`).
+6. Add ML feasibility checklist template (`tasks/ml-feasibility-checklist.md`) for model-required tasks.
+7. Add AGENTS operator quickstart with the top 3 session commands.
+
+### Alternatives Considered
+- **Keep soft guidance only**
+  - Not chosen because policy drift tends to increase without executable checks.
+- **Use strict external schema tooling only**
+  - Not chosen to keep bootstrap simple with Python standard repo dependencies.
+
+### Consequences
+**Positive:**
+- Better reproducibility and lower registry drift.
+- Safer execution defaults through explicit dry-run policy checks.
+- Improved natural-language routing quality via capabilities.
+- Faster onboarding with templates and quickstart runbook.
+
+**Negative:**
+- Additional validation steps and maintenance overhead.
+
+### Related Decisions
+- DEC-020 (Add `route_and_run` Wrapper for NL-to-Script Execution)
+- DEC-019 (Add NL Script Resolver and CI Enforcement for Repeatable Task References)
+- DEC-018 (Adopt Script-First "Only Write Once" Execution Policy)
+
+### Related Specs
+- SPEC-008 (Script-First Automation)
+
+### Output References
+- Added: `scripts/validate_registry.py`
+- Added: `scripts/check_dry_run_conventions.py`
+- Added: `scripts/route-and-run.md`
+- Added: `scripts/templates/new_script.py`
+- Added: `scripts/templates/README.md`
+- Added: `tasks/ml-feasibility-checklist.md`
+- Updated: `scripts/registry.yaml`
+- Updated: `scripts/resolve.py`
+- Updated: `scripts/route_and_run.py`
+- Updated: `scripts/check_repeatable_script_refs.py`
+- Updated: `validate_agents.sh`
+- Updated: `AGENTS.md`
+- Updated: `README.md`
+
+---
+
+---
