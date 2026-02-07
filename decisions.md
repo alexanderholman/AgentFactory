@@ -2,452 +2,6 @@
 
 **NOTE: This file is append-only. Do not modify or remove existing entries. Only add new decisions at the end.**
 
----
-
-## [DEC-020] Add `route_and_run` Wrapper for NL-to-Script Execution
-**Date**: 2026-02-07
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-The script-first policy now had resolver and CI checks, but execution still required separate manual steps (resolve, then run). A single wrapper was needed to improve natural-language HCI and reduce operator friction.
-
-### Decision
-Add `scripts/route_and_run.py` as a wrapper that:
-1. Selects a script from `scripts/registry.yaml` via `--script-id` or NL routing (`--query` / `--intent`).
-2. Applies parameter substitutions for placeholders like `<request>` via `--arg key=value`.
-3. Defaults to dry-run and executes only with `--execute`.
-
-### Alternatives Considered
-- **Keep separate resolve + manual execute steps only**
-  - Not chosen because it adds overhead and increases execution variance.
-- **Execute by default without dry-run**
-  - Not chosen because dry-run default is safer for command transparency.
-
-### Consequences
-**Positive:**
-- More natural NL-to-script operation path.
-- Safer and more transparent execution via rendered-command preview.
-- Better consistency across operators.
-
-**Negative:**
-- Additional script to maintain.
-
-### Implementation Notes
-- Wrapper supports explicit script pinning (`--script-id`) or resolver mode.
-- Missing placeholders fail closed with clear errors.
-
-### Related Decisions
-- DEC-019 (Add NL Script Resolver and CI Enforcement for Repeatable Task References)
-- DEC-018 (Adopt Script-First "Only Write Once" Execution Policy)
-
-### Related Specs
-- SPEC-008 (Script-First Automation)
-
-### Output References
-- Added: `scripts/route_and_run.py`
-- Updated: `scripts/registry.yaml`
-- Updated: `AGENTS.md`
-
----
-
-## [DEC-019] Add NL Script Resolver and CI Enforcement for Repeatable Task References
-**Date**: 2026-02-07
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-After adopting the script-first policy (DEC-018), enforcement and runtime ergonomics needed concrete tooling so agents could consistently resolve intents to scripts and CI could detect repeatable task documentation that omits script references.
-
-### Decision
-Implement two operational utilities and wire them into validation:
-1. Add `scripts/resolve.py` to map natural language intents to `scripts/registry.yaml` entries.
-2. Add `scripts/check_repeatable_script_refs.py` to fail validation when repeatable tasks are documented without nearby script references.
-3. Add registry entries for both scripts and include the check in `validate_agents.sh` and CI triggers.
-
-### Alternatives Considered
-- **Manual script selection only**
-  - Not chosen because it increases ambiguity and operator drift.
-- **Advisory-only repeatable documentation guidance**
-  - Not chosen because non-enforced policy degrades over time.
-
-### Consequences
-**Positive:**
-- Better natural-language to script selection and parameterization UX.
-- Enforceable policy guardrails for repeatable task documentation.
-- Higher reproducibility and lower manual variance.
-
-**Negative:**
-- Slight additional maintenance burden for script metadata and checks.
-
-### Implementation Notes
-- Repeatable-reference check currently scans markdown task docs under `workflows/` and `tasks/`.
-- Accepted script references include `scripts/...`, `scripts/registry.yaml`, or `[SCRIPT:<id>]`.
-
-### Related Decisions
-- DEC-018 (Adopt Script-First "Only Write Once" Execution Policy)
-- DEC-017 (Add `hlmn/memory` OpenCode Skill Documentation)
-
-### Related Specs
-- SPEC-006 (Markdown Output)
-
-### Output References
-- Added: `scripts/resolve.py`
-- Added: `scripts/check_repeatable_script_refs.py`
-- Updated: `scripts/registry.yaml`
-- Updated: `validate_agents.sh`
-- Updated: `.github/workflows/validate-agents.yml`
-- Updated: `AGENTS.md`
-
----
-
-## [DEC-018] Adopt Script-First "Only Write Once" Execution Policy
-**Date**: 2026-02-07
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-The user requested a stricter execution model where agents should operate as natural language to script routing and parameterization, avoid repeated ad-hoc manual actions, and prioritize local model workflows when model-based execution is required.
-
-### Decision
-Adopt an explicit script-first automation policy across AgentFactory:
-1. Agents MUST check for existing scripts/workflows before executing repeatable tasks.
-2. If no script exists for a repeatable action, agents MUST create a reusable script first.
-3. Script execution MUST be parameterized and replayable.
-4. For model-required tasks, agents SHOULD prefer local model training/inference when feasibility gates pass; otherwise use deterministic scripted fallback.
-
-Implementation:
-1. Add trait: `traits/script-first-automation.md`.
-2. Add workflow: `workflows/nl-to-script-routing.md`.
-3. Add script registry: `scripts/registry.yaml`.
-4. Update policy docs and agent behavior files to enforce routing and evidence capture.
-
-### Alternatives Considered
-- **Keep ad-hoc execution as default**
-  - Not chosen because repeatability and consistency degrade over time.
-- **Mandate local model training for every model-related task without gates**
-  - Not chosen because it can be infeasible on constrained hardware/time budgets.
-
-### Consequences
-**Positive:**
-- Stronger reproducibility and lower operational drift.
-- Better human-computer interface for natural language task routing.
-- Clear path to automation reuse and easier validation.
-
-**Negative:**
-- Initial overhead to script and register new repeatable actions.
-- Additional maintenance for script registry metadata.
-
-### Implementation Notes
-- Feasibility gates for local model policy: data availability, hardware budget, runtime budget, acceptance metric definition.
-- Fallback path is deterministic scripted non-ML execution where applicable.
-
-### Related Decisions
-- DEC-017 (Add `hlmn/memory` OpenCode Skill Documentation)
-- DEC-016 (Add ProjectSpec Routing for Condensed Matter Interface Work)
-- DEC-012 (Add AGENTS.md for OpenAI ChatGPT Compatibility)
-
-### Related Specs
-- SPEC-002 (Agent File Format)
-
-### Output References
-- Added: `traits/script-first-automation.md`
-- Added: `workflows/nl-to-script-routing.md`
-- Added: `scripts/registry.yaml`
-- Updated: `AGENTS.md`
-- Updated: `agents.md`
-- Updated: `workflows/WORKFLOWS.md`
-- Updated: `traits/TRAITS.md`
-- Updated: `agents/ProjectSpec.md`
-- Updated: `agents/ProjectManager.md`
-- Updated: `agents/Builder.md`
-- Updated: `agents/ChatGPT.md`
-- Updated: `README.md`
-
----
-
-## [DEC-017] Add `hlmn/memory` OpenCode Skill Documentation
-**Date**: 2026-02-05
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-The user requested a skill-level implementation of a memlog-first workflow (`hlmn/memory`) with explicit guardrails, retrieval cadence, and structured write policy.
-
-### Decision
-Add a dedicated `memory` skill document and installation guidance so the behavior can be reused as a standard OpenCode prompt skill.
-
-Implementation:
-1. Add `skills/memory.md` with memlog retrieval/write/closeout contract.
-2. Add `template/skills/memory.md` so generated repos inherit the workflow.
-3. Add install/index guidance in `skills/README.md` for global and project skill paths.
-4. Reference `skills/memory.md` from OpenCodeManager prompt skills.
-
-### Alternatives Considered
-- **Keep behavior only in ad-hoc prompts**
-  - Not chosen because repeatability and discoverability are weaker.
-- **Rely only on AgentMemory skill**
-  - Not chosen because user requested a concrete `memory` skill contract and cadence.
-
-### Consequences
-**Positive:**
-- Standardized memlog-first behavior across sessions.
-- Clear install path and expected skill naming.
-- Better consistency in high-signal memory quality.
-
-**Negative:**
-- Additional docs to keep synchronized with runtime behavior.
-
-### Implementation Notes
-- Runtime registration depends on OpenCode skill loader/index refresh.
-- If the skill list is empty at runtime, install/copy paths from `skills/README.md` are the canonical fallback.
-
-### Related Decisions
-- DEC-012 (Add AGENTS.md for OpenAI ChatGPT Compatibility)
-- DEC-016 (Add ProjectSpec Routing for Condensed Matter Interface Work)
-
-### Related Specs
-- SPEC-002 (Agent File Format)
-
-### Output References
-- Added: `skills/memory.md`
-- Added: `template/skills/memory.md`
-- Added: `skills/README.md`
-- Updated: `template/agents/opencode/OpenCodeManager.md`
-
----
-
-## [DEC-016] Add ProjectSpec Routing for Condensed Matter Interface Work
-**Date**: 2026-02-05
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-After adding `CondensedMatterSpecialist` and `CondensedMatterInterfaces`, orchestration guidance still lacked an explicit routing rule in `ProjectSpec`. Without routing, invocation could be inconsistent for interface-energetics tasks.
-
-### Decision
-Update `agents/ProjectSpec.md` to include:
-1. `specialisms/CondensedMatterInterfaces.md` in selected specialism inputs.
-2. A direct routing rule: `CondensedMatterSpecialist + CondensedMatterInterfaces` for computational materials interface tasks.
-
-### Alternatives Considered
-- **Keep implicit routing only**
-  - Not chosen because orchestration behavior would remain inconsistent.
-- **Route through SoftwareSpec only**
-  - Not chosen because domain checks for DFT/MLP and interface physics are too specific.
-
-### Consequences
-**Positive:**
-- Predictable specialist routing for relevant tasks.
-- Better consistency between manager planning and domain execution.
-
-**Negative:**
-- Slightly more routing logic to maintain.
-
-**Trade-off:**
-- Simplicity vs correctness of specialization (chose specialization clarity).
-
-### Implementation Notes
-- Updated file: `agents/ProjectSpec.md`
-- No schema or tag changes required.
-
-### Related Decisions
-- DEC-013 (Add CondensedMatterSpecialist Agent for DFT/MLP Interface Workflows)
-- DEC-015 (Add CondensedMatterInterfaces Specialism for Reusable Domain Gates)
-
-### Related Specs
-- SPEC-002 (Agent File Format)
-
-### Output References
-- Updated: `agents/ProjectSpec.md`
-
----
-
-## [DEC-015] Add CondensedMatterInterfaces Specialism for Reusable Domain Gates
-**Date**: 2026-02-05
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-`CondensedMatterSpecialist` was implemented and refined (DEC-013, DEC-014), but the domain logic was embedded primarily in the agent file. The user requested reusable coverage so other agents can apply the same condensed matter interface quality rules.
-
-### Decision
-Add a new specialism file `specialisms/CondensedMatterInterfaces.md` and reference it from `CondensedMatterSpecialist` optional inputs.
-
-The specialism standardizes:
-1. interface-generation plausibility gates,
-2. DFT/MLP fairness and role separation,
-3. ranking + absolute-error interpretation,
-4. direction-asymmetry diagnostics,
-5. MLI dataset provenance requirements.
-
-### Alternatives Considered
-- **Keep logic only in CondensedMatterSpecialist**
-  - Not chosen because reuse across agents would be weak and inconsistent.
-- **Create multiple narrow specialisms (DFT-only, MLP-only, data-only)**
-  - Not chosen because current workflow value is in integrated, end-to-end interface checks.
-- **Defer until more agents need it**
-  - Not chosen because immediate reuse value is high and implementation cost is low.
-
-### Consequences
-**Positive:**
-- Reusable domain rules for Architect/Builder/Tester/Skeptic handoffs.
-- Better consistency in method review outputs across sessions.
-- Clear acceptance checks for interface-study QA.
-
-**Negative:**
-- One more specialism artifact to maintain.
-
-**Trade-off:**
-- Minimal maintenance overhead vs stronger cross-agent consistency (chose consistency).
-
-### Implementation Notes
-- Added: `specialisms/CondensedMatterInterfaces.md` (v1.0)
-- Updated: `agents/CondensedMatterSpecialist.md` to reference the new specialism.
-- Existing schema and tag model unchanged.
-
-### Related Decisions
-- DEC-013 (Add CondensedMatterSpecialist Agent for DFT/MLP Interface Workflows)
-- DEC-014 (Refine CondensedMatterSpecialist Using Upgrade_Report_Revision Source)
-
-### Related Specs
-- SPEC-002 (Agent File Format)
-
-### Output References
-- Added: `specialisms/CondensedMatterInterfaces.md`
-- Updated: `agents/CondensedMatterSpecialist.md`
-
----
-
-## [DEC-014] Refine CondensedMatterSpecialist Using Upgrade_Report_Revision Source
-**Date**: 2026-02-05
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-After introducing `CondensedMatterSpecialist` (DEC-013), the user requested tightening the agent definition against the revised upgrade report PDF (`Upgrade_Report_Revision.pdf`) rather than only folder-level context.
-
-The revised report emphasizes:
-- MLI as the primary end-goal,
-- ARTEMIS deterministic interface generation and RAFFLE stochastic diversity,
-- fairness of unrelaxed DFT-vs-MLP comparisons,
-- strong ranking fidelity with potentially large absolute error,
-- geometry-direction asymmetry (notably lower-slab Si behavior),
-- reproducible provenance for downstream training.
-
-### Decision
-Refine `CondensedMatterSpecialist` behavior and deliverables to encode the above points explicitly, while keeping the same agent ID and file path.
-
-The update adds explicit checks for:
-1. deterministic vs stochastic generation boundaries (ARTEMIS/RAFFLE roles),
-2. lower-vs-upper slab asymmetry analysis,
-3. unrelaxed comparison fairness and escalation criteria to DFT relaxation,
-4. MLI dataset-readiness outputs (descriptors + provenance fields).
-
-### Alternatives Considered
-- **Leave v1.0 unchanged**
-  - Not chosen because it under-specifies key methodological risks identified in the revised report.
-- **Create a second specialist agent**
-  - Not chosen because this would fragment ownership and duplicate responsibilities.
-- **Move all detail to a specialism file only**
-  - Not chosen because core agent behavior should carry these quality gates directly.
-
-### Consequences
-**Positive:**
-- Better alignment with the project's stated research objective (MLI pipeline).
-- Stronger methodological safeguards for interpreting MLP-vs-DFT outcomes.
-- Clearer handoff requirements for Builder/Tester in scientific workflow tasks.
-
-**Negative:**
-- Slightly denser agent documentation.
-- Requires maintaining this tighter scope as the project evolves.
-
-**Trade-off:**
-- Brevity vs methodological precision (chose precision for scientific validity).
-
-### Implementation Notes
-- Updated `agents/CondensedMatterSpecialist.md` in place.
-- Updated `agents.yaml` metadata for the same ID with version bump to `1.1.0`.
-- Validation remains required via `./validate_agents.sh`.
-
-### Related Decisions
-- DEC-013 (Add CondensedMatterSpecialist Agent for DFT/MLP Interface Workflows)
-- DEC-003 (Require Standardized Headings in Agent Files)
-
-### Related Specs
-- SPEC-002 (Agent File Format)
-- SPEC-003 (Tags and Metadata)
-
-### Output References
-- Updated: `agents/CondensedMatterSpecialist.md`
-- Updated: `agents.yaml`
-
----
-
-## [DEC-013] Add CondensedMatterSpecialist Agent for DFT/MLP Interface Workflows
-**Date**: 2026-02-05
-**Status**: Implemented
-**Decision Maker**: OpenCodeManager / User Request
-
-### Context
-The user requested a new OpenCode-facing agent type tailored to ongoing PhD condensed matter work. Current core agents (Architect, Builder, Tester, Skeptic, Editor, ProjectManager) provide strong generic orchestration but do not encode domain-specific checks for computational materials interface studies.
-
-Repository review of `task/upgrade_report` indicated repeated workflow needs around:
-- interface generation plausibility,
-- DFT vs MLP (MACE) screening methodology,
-- rank-fidelity interpretation (Spearman, Kendall, Top-N overlap),
-- handling of large absolute energy error with useful ranking behavior,
-- reproducible HPC execution and failure filtering.
-
-### Decision
-Add a new agent type, `CondensedMatterSpecialist`, with explicit guidance for computational condensed matter interface screening workflows.
-
-Implementation includes:
-1. New agent definition file: `agents/CondensedMatterSpecialist.md`
-2. New registry entry in `agents.yaml` with unique ID `condensed-matter-specialist-001`
-3. Standard required headings and AgentFactory validation compatibility
-
-### Alternatives Considered
-- **Use only existing general agents**
-  - Not chosen because domain checks would remain implicit and inconsistently applied.
-- **Encode this as a specialism only**
-  - Not chosen because the request was for a new agent type and orchestration visibility is clearer with a first-class agent.
-- **Create a broader PhysicsSpecialist agent**
-  - Not chosen because current evidence and need are concentrated in condensed matter interface energetics workflows.
-
-### Consequences
-**Positive:**
-- Adds explicit domain quality gates for materials-interface pipelines.
-- Reduces scientific-method ambiguity in DFT/MLP pre-screening workflows.
-- Improves handoff clarity from OpenCodeManager to domain specialist behavior.
-
-**Negative:**
-- Slight increase in agent catalog complexity.
-- Adds one more agent artifact to maintain over time.
-
-**Trade-off:**
-- Catalog simplicity vs. domain precision (chose domain precision for this active research context).
-
-### Implementation Notes
-- Agent follows required section order: Purpose, Inputs, Outputs, Behavior, Constraints.
-- Tags chosen from existing allowed list (`analysis`, `quality`, `integration`) to avoid schema churn.
-- Scope intentionally constrained to condensed matter computational workflows, especially interface ranking and screening.
-
-### Related Decisions
-- DEC-002 (Use agents.yaml for Agent Configuration)
-- DEC-003 (Require Standardized Headings in Agent Files)
-- DEC-012 (Add AGENTS.md for OpenAI ChatGPT Compatibility)
-
-### Related Specs
-- SPEC-002 (Agent File Format)
-- SPEC-003 (Tags and Metadata)
-
-### Output References
-- Added: `agents/CondensedMatterSpecialist.md`
-- Updated: `agents.yaml`
-
----
-
 ## Decision Record Format
 
 Each decision entry MUST follow this format:
@@ -1371,5 +925,217 @@ Create an AGENTS.md file following the OpenAI standard to complement existing do
 ### Output References
 - Created: AGENTS.md (5694 bytes, 202 lines)
 - Standards reference: https://github.com/agentsmd/agents.md
+
+---
+
+## [DEC-013] Add OpenCodeManager Agent for General Orchestration
+**Date**: 2026-02-05
+**Status**: Implemented
+**Decision Maker**: User Request / OpenCodeManager setup
+
+### Context
+OpenCode is being used as a general-purpose CLI agent, and we need a dedicated manager role to coordinate session flow, enforce AgentFactory rules, and drive consistent handoffs between specialized agents.
+
+### Decision
+Add a new agent definition named OpenCodeManager to serve as the orchestration and session-control role for OpenCode usage. This agent focuses on intake, planning, safe execution, and role handoffs while enforcing repository constraints and append-only logging rules.
+
+### Alternatives Considered
+- **Reuse ProjectManager**: Not chosen because ProjectManager is optimized for packaging and handoffs at the end of the pipeline, not continuous session control.
+- **Rely on ChatGPT Generalist**: Not chosen because it lacks an explicit orchestration contract and clear session-control responsibilities.
+
+### Consequences
+**Positive:**
+- Clear, reusable orchestration contract for OpenCode sessions
+- Better consistency in tool usage and repo hygiene
+- Easier handoff between specialized roles
+
+**Negative:**
+- Additional agent to maintain
+- Overlap risk with ProjectManager responsibilities
+
+**Trade-offs:**
+- Central control vs. flexibility (improves consistency but adds process)
+
+### Implementation Notes
+- Added agent file: `agents/opencode/OpenCodeManager.md`
+- Registered in `agents.yaml` with ID `opencode-manager-001`
+- Uses existing allowed tags to avoid schema changes
+
+### Related Decisions
+- DEC-011 (Flexible Directory Structure)
+- DEC-012 (AGENTS.md for OpenAI compatibility)
+
+### Related Specs
+- SPEC-002 (Agent File Format)
+- SPEC-003 (Tags and Metadata)
+- SPEC-007 (Flexible Directory Structure)
+
+---
+
+## [DEC-018] Adopt Script-First "Only Write Once" Execution Policy
+**Date**: 2026-02-07
+**Status**: Implemented
+**Decision Maker**: OpenCodeManager / User Request
+
+### Context
+The user requested a stricter execution model where agents should operate as natural language to script routing and parameterization, avoid repeated ad-hoc manual actions, and prioritize local model workflows when model-based execution is required.
+
+### Decision
+Adopt an explicit script-first automation policy across AgentFactory:
+1. Agents MUST check for existing scripts/workflows before executing repeatable tasks.
+2. If no script exists for a repeatable action, agents MUST create a reusable script first.
+3. Script execution MUST be parameterized and replayable.
+4. For model-required tasks, agents SHOULD prefer local model training/inference when feasibility gates pass; otherwise use deterministic scripted fallback.
+
+Implementation:
+1. Add trait: `traits/script-first-automation.md`.
+2. Add workflow: `workflows/nl-to-script-routing.md`.
+3. Add script registry: `scripts/registry.yaml`.
+4. Update policy docs and agent behavior files to enforce routing and evidence capture.
+
+### Alternatives Considered
+- **Keep ad-hoc execution as default**
+  - Not chosen because repeatability and consistency degrade over time.
+- **Mandate local model training for every model-related task without gates**
+  - Not chosen because it can be infeasible on constrained hardware/time budgets.
+
+### Consequences
+**Positive:**
+- Stronger reproducibility and lower operational drift.
+- Better human-computer interface for natural language task routing.
+- Clear path to automation reuse and easier validation.
+
+**Negative:**
+- Initial overhead to script and register new repeatable actions.
+- Additional maintenance for script registry metadata.
+
+### Implementation Notes
+- Feasibility gates for local model policy: data availability, hardware budget, runtime budget, acceptance metric definition.
+- Fallback path is deterministic scripted non-ML execution where applicable.
+
+### Related Decisions
+- DEC-017 (Add `hlmn/memory` OpenCode Skill Documentation)
+- DEC-016 (Add ProjectSpec Routing for Condensed Matter Interface Work)
+- DEC-012 (Add AGENTS.md for OpenAI ChatGPT Compatibility)
+
+### Related Specs
+- SPEC-002 (Agent File Format)
+
+### Output References
+- Added: `traits/script-first-automation.md`
+- Added: `workflows/nl-to-script-routing.md`
+- Added: `scripts/registry.yaml`
+- Updated: `AGENTS.md`
+- Updated: `agents.md`
+- Updated: `workflows/WORKFLOWS.md`
+- Updated: `traits/TRAITS.md`
+- Updated: `agents/ProjectSpec.md`
+- Updated: `agents/ProjectManager.md`
+- Updated: `agents/Builder.md`
+- Updated: `agents/ChatGPT.md`
+- Updated: `README.md`
+
+---
+
+---
+
+## [DEC-019] Add NL Script Resolver and CI Enforcement for Repeatable Task References
+**Date**: 2026-02-07
+**Status**: Implemented
+**Decision Maker**: OpenCodeManager / User Request
+
+### Context
+After adopting the script-first policy (DEC-018), enforcement and runtime ergonomics needed concrete tooling so agents could consistently resolve intents to scripts and CI could detect repeatable task documentation that omits script references.
+
+### Decision
+Implement two operational utilities and wire them into validation:
+1. Add `scripts/resolve.py` to map natural language intents to `scripts/registry.yaml` entries.
+2. Add `scripts/check_repeatable_script_refs.py` to fail validation when repeatable tasks are documented without nearby script references.
+3. Add registry entries for both scripts and include the check in `validate_agents.sh` and CI triggers.
+
+### Alternatives Considered
+- **Manual script selection only**
+  - Not chosen because it increases ambiguity and operator drift.
+- **Advisory-only repeatable documentation guidance**
+  - Not chosen because non-enforced policy degrades over time.
+
+### Consequences
+**Positive:**
+- Better natural-language to script selection and parameterization UX.
+- Enforceable policy guardrails for repeatable task documentation.
+- Higher reproducibility and lower manual variance.
+
+**Negative:**
+- Slight additional maintenance burden for script metadata and checks.
+
+### Implementation Notes
+- Repeatable-reference check currently scans markdown task docs under `workflows/` and `tasks/`.
+- Accepted script references include `scripts/...`, `scripts/registry.yaml`, or `[SCRIPT:<id>]`.
+
+### Related Decisions
+- DEC-018 (Adopt Script-First "Only Write Once" Execution Policy)
+- DEC-017 (Add `hlmn/memory` OpenCode Skill Documentation)
+
+### Related Specs
+- SPEC-006 (Markdown Output)
+
+### Output References
+- Added: `scripts/resolve.py`
+- Added: `scripts/check_repeatable_script_refs.py`
+- Updated: `scripts/registry.yaml`
+- Updated: `validate_agents.sh`
+- Updated: `.github/workflows/validate-agents.yml`
+- Updated: `AGENTS.md`
+
+---
+
+---
+
+## [DEC-020] Add `route_and_run` Wrapper for NL-to-Script Execution
+**Date**: 2026-02-07
+**Status**: Implemented
+**Decision Maker**: OpenCodeManager / User Request
+
+### Context
+The script-first policy now had resolver and CI checks, but execution still required separate manual steps (resolve, then run). A single wrapper was needed to improve natural-language HCI and reduce operator friction.
+
+### Decision
+Add `scripts/route_and_run.py` as a wrapper that:
+1. Selects a script from `scripts/registry.yaml` via `--script-id` or NL routing (`--query` / `--intent`).
+2. Applies parameter substitutions for placeholders like `<request>` via `--arg key=value`.
+3. Defaults to dry-run and executes only with `--execute`.
+
+### Alternatives Considered
+- **Keep separate resolve + manual execute steps only**
+  - Not chosen because it adds overhead and increases execution variance.
+- **Execute by default without dry-run**
+  - Not chosen because dry-run default is safer for command transparency.
+
+### Consequences
+**Positive:**
+- More natural NL-to-script operation path.
+- Safer and more transparent execution via rendered-command preview.
+- Better consistency across operators.
+
+**Negative:**
+- Additional script to maintain.
+
+### Implementation Notes
+- Wrapper supports explicit script pinning (`--script-id`) or resolver mode.
+- Missing placeholders fail closed with clear errors.
+
+### Related Decisions
+- DEC-019 (Add NL Script Resolver and CI Enforcement for Repeatable Task References)
+- DEC-018 (Adopt Script-First "Only Write Once" Execution Policy)
+
+### Related Specs
+- SPEC-008 (Script-First Automation)
+
+### Output References
+- Added: `scripts/route_and_run.py`
+- Updated: `scripts/registry.yaml`
+- Updated: `AGENTS.md`
+
+---
 
 ---

@@ -58,7 +58,7 @@ For script-first routing policy assets:
 python3 -c "import yaml; yaml.safe_load(open('scripts/registry.yaml'))"
 ```
 
-All 22 validation tests should pass before committing changes.
+All validation tests should pass before committing changes.
 
 GitHub Actions automatically validates agent definitions on pull requests.
 
